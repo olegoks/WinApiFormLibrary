@@ -1,0 +1,8 @@
+x64/
+Debug/
+*.pdb
+*.lik
+*.exp
+*.exe
+.vs/
+*.ilk
