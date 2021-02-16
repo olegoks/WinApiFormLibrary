@@ -4,6 +4,8 @@
 
 EXPIMP class Button final {
 private:
+	
+	static const std::wstring kDefaultText;
 
 	const HINSTANCE hInstance_;
 	HWND self_hWnd_;
@@ -21,7 +23,6 @@ public:
 		hInstance_{ hInstance },
 		self_hWnd_{ NULL },
 		parent_hWnd_{ NULL },
-		text_{ L"Text" },
 		pos_x_{ 0 },
 		pos_y_{ 0 },
 		width_{ 100 },
@@ -30,17 +31,15 @@ public:
 
 	}
 
-	EXPIMP void Create(const HWND parent_hWnd)noexcept(false) {
+	EXPIMP void Create(const HWND parent_hWnd, const std::wstring text = kDefaultText)noexcept(false) {
 
-		self_hWnd_ = CreateWindow(L"Button", text_.c_str(), BS_DEFPUSHBUTTON |WS_CHILD | WS_VISIBLE | WS_BORDER, pos_x_, pos_y_, width_, height_,
-			parent_hWnd, NULL, hInstance_, this);
+		self_hWnd_ = CreateWindow(L"Button", text.c_str(), BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_BORDER,
+			pos_x_, pos_y_, width_, height_,
+			parent_hWnd, NULL, hInstance_, NULL);
 
-		if (self_hWnd_ == NULL) {
-		
+		if (self_hWnd_ == NULL)
 			throw FormExcep{ u8"Creating button exception." };
 		
-		}
-
 		#ifdef _M_X64
 			#define BindPointerToForm SetWindowLongPtr
 			using PointerType = LONG_PTR;

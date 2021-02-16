@@ -4,7 +4,7 @@
 #define _WINDOW_HPP_
 
 #include <Windows.h>
-#include <Windowsx.h>
+
 #include <string>
 #include <string_view>
 #include "Library/FormTypes.hpp"
@@ -83,9 +83,16 @@ public:
 	void Caption(const std::wstring& caption)noexcept(true);
 	const HWND Handle()const noexcept(true);
 	void InitFormProc(FormProc messages_processing)noexcept(true);
+	void Position(const int x, const int y)noexcept(true);
 	void Size(const size_t width, const size_t height)noexcept(true);
+	
+	int Width()const noexcept(true);
+	int Height()const noexcept(true);
+	int X()const noexcept(true);
+	int Y()const noexcept(true);
+
 	void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(true);
-	void ShowFrame(const void* const frame, const size_t size)noexcept(false);
+	void ShowFrame(const void* const frame)noexcept(false);
 
 };
 

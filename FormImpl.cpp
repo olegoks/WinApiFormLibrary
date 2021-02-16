@@ -73,26 +73,20 @@ LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPAR
 
 	}
 
-	this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	if (message == WM_COMMAND) {
+	
+		//this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(HWND(lParam), GWLP_USERDATA));
+	
+	} else {
+	
+		this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	
+	}
 
 	if (this_form != nullptr) {
 	
-		KeyAction key_action{ message, wParam, lParam };
-
-		bool mouse_message = (key_action.action_ == Action::MouseMove
-			|| key_action.action_ == Action::LMouseDown
-			|| key_action.action_ == Action::LMouseUp
-			|| key_action.action_ == Action::RMouseDown
-			|| key_action.action_ == Action::RMouseUp);
-
-		Message message{};
-
-		if (mouse_message)
-			message = Message{ key_action, GET_X_LPARAM(lParam),  GET_Y_LPARAM(lParam) };
-		else
-			message = Message{ key_action };
-
-		bool message_processed = this_form->form_proc_(message);
+		Message mes{ message, wParam, lParam };
+		bool message_processed = this_form->form_proc_(mes);
 
 		if (message_processed)
 			return LRESULT{ 0 };
@@ -101,11 +95,6 @@ LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPAR
 
 	switch (message) {
 
-	case WM_COMMAND: { 
-
-		
-		break; 
-	}
 	case WM_CLOSE: { DestroyWindow(hWnd);break; }
 
 	case WM_DESTROY: { PostQuitMessage(0);break; }
@@ -130,9 +119,22 @@ void FormImpl::InitFormProc(FormProc messages_processing) noexcept(true){
 
 }
 
+void FormImpl::Position(const int x, const int y) noexcept(true){
+
+	params_.x_ = x;
+	params_.y_ = y;
+
+	SetWindowPos(self_hWnd_, NULL, x, y, params_.width_, params_.height_, NULL);
+
+}
+
 void FormImpl::Caption(const std::wstring& caption)noexcept(true){
 
-	SetWindowText(self_hWnd_, caption.c_str());
+	params_.title_ = caption;
+	
+	if(self_hWnd_ != NULL)
+		SetWindowText(self_hWnd_, caption.c_str());
+
 }
 
 void FormImpl::Size(const size_t width, const size_t height) noexcept(true){
@@ -140,9 +142,31 @@ void FormImpl::Size(const size_t width, const size_t height) noexcept(true){
 	params_.width_ = width;
 	params_.height_ = height;
 
-	SetWindowPos(self_hWnd_, NULL, params_.x_, params_.y_, width, height, SWP_NOZORDER);
+	if(self_hWnd_ != NULL)
+		SetWindowPos(self_hWnd_, NULL, params_.x_, params_.y_, width, height, SWP_NOZORDER);
+
 	InitFrameInfo(width, height);
 
+}
+
+int FormImpl::Width() const noexcept(true){
+
+	return params_.width_;
+}
+
+int FormImpl::Height() const noexcept(true){
+
+	return params_.height_;
+}
+
+int FormImpl::X() const noexcept(true){
+
+	return params_.x_;
+}
+
+int FormImpl::Y() const noexcept(true){
+
+	return params_.y_;
 }
 
 void FormImpl::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(true){
@@ -241,7 +265,7 @@ void FormImpl::Run()noexcept(false){
 }
 
 
-void FormImpl::ShowFrame(const void* const frame_buffer, const size_t size)noexcept(false) {
+void FormImpl::ShowFrame(const void* const frame_buffer)noexcept(false) {
 
 	if (!SetDIBitsToDevice(
 		FormImpl::device_context_,

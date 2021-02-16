@@ -3,7 +3,9 @@
 #define WINDOW_TYPES_HPP
 
 #include <windows.h>
+#include <Windowsx.h>
 #include <functional>
+#include <exception>
 
 #define CALLBACK __stdcall
 
@@ -15,7 +17,7 @@
 #define EXPIMP __declspec(dllimport)
 #endif
 
-	enum class Key : uint32_t {
+	enum class Key : unsigned int {
 
 		Nothing = 0,
 		ArrowLeft,
@@ -42,11 +44,20 @@
 		LMouseDown,
 		LMouseUp,
 		RMouseDown,
-		RMouseUp
+		RMouseUp,
+		MenuControlAccel,
+		ButtonClicked
 
 	};
 
-	class Coordinats final {
+	enum class ActionType :unsigned int {
+
+		Mouse = 0,
+		Keyboard,
+		Menu,
+		Control,
+		Accelerator,
+		Nothing
 
 	};
 
@@ -56,57 +67,73 @@
 		Key key_;
 		Action action_;
 
-		UINT message_;
-		WPARAM wParam_;
-		LPARAM lParam_;
-
-		explicit KeyAction(UINT Message, WPARAM wParam, LPARAM lParam)noexcept(true);
-
 		explicit KeyAction()noexcept(true);
 
 		explicit KeyAction(Key key, Action action)noexcept(true);
-
-		bool operator !=(const KeyAction& key_action)noexcept(true);
 
 	};
 
 	struct Message {
 
-		KeyAction key_type;
-		int x_;
-		int y_;
-
-
-		explicit Message()noexcept(true);
-
-		explicit Message(KeyAction key, const int x = 0, const int y = 0)noexcept(true);
-
-		bool IsUsefull()const noexcept(true) {
-
-			return key_type.action_ != Action::Nothing;
-
-		}
-
-		int X()const noexcept(true) { return x_; }
-		int Y()const noexcept(true) { return y_; }
-
-	};
-
-
-	class FormExcep final {
 	private:
 
-		std::string_view error_message_;
+		KeyAction key_action_;
+
+		UINT message_;
+		WPARAM wParam_;
+		LPARAM lParam_;
+
+		int x_;
+		int y_;
+		int control_id_;
+		HWND hWnd_;
 
 	public:
 
-		explicit FormExcep(const char* const message)noexcept(true) :
-			error_message_{ message } {
+		explicit Message(UINT Message, WPARAM wParam, LPARAM lParam)noexcept(true);
+
+	public:
+
+		void Coordinats(int x, int y)noexcept(true) {
+
+			x_ = x;
+			y_ = y;
+
+		}
+		
+		Action GetAction()const noexcept(true) { return key_action_.action_; };
+		Key GetKey()const noexcept(true) { return key_action_.key_; };
+		HWND GethWnd()const noexcept(true) { return hWnd_; };
+		int GetControlId()const noexcept(true) { return control_id_; };
+
+		int GetX()const noexcept(true) { return x_; }
+		int GetY()const noexcept(true) { return y_; }
+
+	};
+
+	class FormExcep final : protected std::exception {
+	private:
+
+		std::string message_;
+
+	public:
+
+		explicit FormExcep(std::string&& message)noexcept(true) :
+			std::exception{ },
+			message_{ std::move( message ) } {
+
+		
+
+		}
+
+		explicit FormExcep(const std::string& message)noexcept(true):
+			std::exception{},
+			message_{ message }{
 
 
 		}
 
-		const std::string_view& What()const noexcept(true) { return error_message_; };
+		const std::string& What()const noexcept(true) { return message_; };
 
 	};
 

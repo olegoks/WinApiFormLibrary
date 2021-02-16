@@ -25,7 +25,7 @@ protected:
 	EXPIMP void Run()noexcept(false);
 	EXPIMP void Destroy()noexcept(false);
 
-	EXPIMP void ShowFrame(const void* const frame_buffer, const size_t size)noexcept(false);
+	EXPIMP void ShowFrame(const void* const frame_buffer)noexcept(false);
 
 public:
 
@@ -33,8 +33,13 @@ public:
 	EXPIMP const HWND Handle()const noexcept(true);
 	EXPIMP void InitFormProc(FormProc messages_processing)noexcept(true);
 	EXPIMP void Size(const size_t width, const size_t height)noexcept(true);
-	EXPIMP void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(true);
+	EXPIMP int Width()const noexcept(true);
+	EXPIMP int Height()const noexcept(true);
+	EXPIMP int X()const noexcept(true);
+	EXPIMP int Y()const noexcept(true);
 
+	EXPIMP void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(true);
+	EXPIMP void Position(int x, int y)noexcept(true);
 	//void Run(int nCmdShow, const HWND parent_hWnd = NULL)const noexcept(false);
 
 };
