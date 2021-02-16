@@ -9,7 +9,6 @@
 #include <string_view>
 #include "Library/FormTypes.hpp"
 
-
 class FormImpl final{
 private:
 

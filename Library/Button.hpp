@@ -50,7 +50,20 @@ public:
 			using ValueType = LONG;
 		#endif
 
-		BindPointerToForm(self_hWnd_, GWLP_USERDATA, reinterpret_cast<PointerType>(this));
+			SetLastError(NULL);
+			int last_value = BindPointerToForm(self_hWnd_, GWLP_USERDATA, reinterpret_cast<PointerType>(this));
+
+			//Pointer linked to the Form
+			//SetFormLongPtr return previous value or zero, if error, but if last value is 0, we should check last error
+
+			if (last_value == 0) {
+
+				DWORD error = GetLastError();
+
+				if (error != 0)
+					throw FormExcep{ u8"Creating button exception." };
+
+			}
 
 	}
 
@@ -65,5 +78,7 @@ public:
 		proc_ = process_messages;
 
 	}
+
+	friend class FormImpl;
 
 };

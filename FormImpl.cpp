@@ -39,8 +39,6 @@ void FormImpl::InitFrameInfo(const size_t width, const size_t height) noexcept(t
 
 LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPARAM lParam) {
 
-	FormImpl* this_form = nullptr;
-
 	if (message == WM_CREATE) {
 
 		#ifdef _M_X64
@@ -54,7 +52,7 @@ LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPAR
 		#endif
 
 		LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-		this_form = (FormImpl*)lpcs->lpCreateParams;
+		FormImpl* this_form = (FormImpl*)lpcs->lpCreateParams;
 		this_form->self_hWnd_ = hWnd;
 		SetLastError(NULL);
 		int last_value = BindPointerToForm(hWnd, GWLP_USERDATA, reinterpret_cast<PointerType>(this_form));
@@ -73,25 +71,36 @@ LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPAR
 
 	}
 
+	bool message_processed = false;
+
 	if (message == WM_COMMAND) {
 	
-		//this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(HWND(lParam), GWLP_USERDATA));
-	
+		Button* this_button = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(HWND(lParam), GWLP_USERDATA));
+
+		if (this_button != nullptr) {
+
+			Message mes{ message, wParam, lParam };
+			this_button->proc_(mes);
+
+		}
+
+
 	} else {
 	
-		this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+		FormImpl* this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	
+		if (this_form != nullptr) {
+
+			Message mes{ message, wParam, lParam };
+			message_processed = this_form->form_proc_(mes);
+
+			if (message_processed)
+				return LRESULT{ 0 };
+
+		}
 	}
 
-	if (this_form != nullptr) {
-	
-		Message mes{ message, wParam, lParam };
-		bool message_processed = this_form->form_proc_(mes);
 
-		if (message_processed)
-			return LRESULT{ 0 };
-	
-	}
 
 	switch (message) {
 

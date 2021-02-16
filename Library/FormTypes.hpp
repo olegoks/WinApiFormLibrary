@@ -6,6 +6,7 @@
 #include <Windowsx.h>
 #include <functional>
 #include <exception>
+#include <Button.hpp>
 
 #define CALLBACK __stdcall
 
