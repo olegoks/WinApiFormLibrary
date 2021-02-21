@@ -1,5 +1,7 @@
 #include "FormImpl.hpp"
+
 #include <chrono>
+#include <Button.hpp>
 
 //Form constants
 const std::wstring FormImpl::kDefaultTitle{ L"Default Form title" };
@@ -13,8 +15,8 @@ const DWORD		   FormImpl::kDefaultExStyle{ WS_EX_TOPMOST };
 
 const FormProc	   kDefaultFormProc{ [](Message& message)->bool { return false; } };
 
-FormImpl::FormImpl(const HINSTANCE hInstance)noexcept(true):
-	hInstance_{ hInstance },
+FormImpl::FormImpl()noexcept(true):
+	hInstance_{ GetModuleHandleW(NULL) },
 	parent_hWnd_{ NULL },
 	params_{ },
 	device_context_{ NULL },
@@ -23,6 +25,16 @@ FormImpl::FormImpl(const HINSTANCE hInstance)noexcept(true):
 	form_proc_{ kDefaultFormProc }{
 
 }
+
+#ifdef _M_X64
+#define BindPointerToForm SetWindowLongPtr
+using PointerType = LONG_PTR;
+using ValueType = LONG_PTR;
+#else
+#define BindPointerToForm SetFormLong
+using PointerType = LONG;
+using ValueType = LONG;
+#endif
 
 void FormImpl::InitFrameInfo(const size_t width, const size_t height) noexcept(true){
 
@@ -37,19 +49,9 @@ void FormImpl::InitFrameInfo(const size_t width, const size_t height) noexcept(t
 
 }
 
-LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPARAM lParam) {
+LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPARAM lParam)noexcept(false) {
 
 	if (message == WM_CREATE) {
-
-		#ifdef _M_X64
-			#define BindPointerToForm SetWindowLongPtr
-			using PointerType = LONG_PTR;
-			using ValueType = LONG_PTR;
-		#else
-			#define BindPointerToForm SetFormLong
-			using PointerType = LONG;
-			using ValueType = LONG;
-		#endif
 
 		LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
 		FormImpl* this_form = (FormImpl*)lpcs->lpCreateParams;
@@ -57,64 +59,56 @@ LRESULT CALLBACK FormImpl::WndProc(HWND hWnd, UINT message, WPARAM  wParam, LPAR
 		SetLastError(NULL);
 		int last_value = BindPointerToForm(hWnd, GWLP_USERDATA, reinterpret_cast<PointerType>(this_form));
 
-		//Pointer linked to the Form
-		//SetFormLongPtr return previous value or zero, if error, but if last value is 0, we should check last error
-
 		if (last_value == 0) {
 
 			DWORD error = GetLastError();
 
 			if (error != 0)
-				return 0;
-
+				throw FormExcep{ u8"BindPointerToWindow error." };
 		}
+		else
+			throw FormExcep{ u8"BindPointerToWindow error." };
 
 	}
 
 	bool message_processed = false;
+	Message mes{ message, wParam, lParam };
 
 	if (message == WM_COMMAND) {
+		
+		LONG_PTR ptr = GetWindowLongPtr(HWND(lParam), GWLP_USERDATA);
+		Button* this_button = reinterpret_cast<Button* const>(ptr);
+		
+		if (ptr != NULL)
+			message_processed = this_button->proc_(mes);
 	
-		Button* this_button = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(HWND(lParam), GWLP_USERDATA));
-
-		if (this_button != nullptr) {
-
-			Message mes{ message, wParam, lParam };
-			this_button->proc_(mes);
-
-		}
-
-
 	} else {
-	
-		FormImpl* this_form = reinterpret_cast<FormImpl* const>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-	
-		if (this_form != nullptr) {
 
-			Message mes{ message, wParam, lParam };
+		LONG_PTR ptr = GetWindowLongPtr(hWnd, GWLP_USERDATA);
+		FormImpl* this_form = reinterpret_cast<FormImpl* const>(ptr);
+
+		if (ptr != NULL)
 			message_processed = this_form->form_proc_(mes);
-
-			if (message_processed)
-				return LRESULT{ 0 };
-
-		}
+		
 	}
 
-
+	if (message_processed)
+		return LRESULT{ 0 };
 
 	switch (message) {
 
 	case WM_CLOSE: { DestroyWindow(hWnd);break; }
-
 	case WM_DESTROY: { PostQuitMessage(0);break; }
-		
 	default: return DefWindowProc(hWnd, message, wParam, lParam); 
 		
 	}
 
 }
 		
-FormImpl::~FormImpl() {}
+FormImpl::~FormImpl()noexcept(true) {
+
+
+}
 
 const HWND FormImpl::Handle() const noexcept(true){
 
@@ -128,31 +122,53 @@ void FormImpl::InitFormProc(FormProc messages_processing) noexcept(true){
 
 }
 
-void FormImpl::Position(const int x, const int y) noexcept(true){
+#include <string>
+#include <iostream>
 
+void FormImpl::Position(const int x, const int y) noexcept(false){
+
+	if (WasCreated()) {
+	
+		BOOL success = SetWindowPos(self_hWnd_, NULL, x, y, params_.width_, params_.height_, NULL);
+		
+		if (!success) 
+			throw FormExcep{ u8"SetWindowPos error." };
+
+	}
+	
 	params_.x_ = x;
 	params_.y_ = y;
 
-	SetWindowPos(self_hWnd_, NULL, x, y, params_.width_, params_.height_, NULL);
-
 }
 
-void FormImpl::Caption(const std::wstring& caption)noexcept(true){
+void FormImpl::Caption(const std::wstring& caption)noexcept(false){
+
+	if (WasCreated()) {
+	
+		BOOL success = SetWindowText(self_hWnd_, caption.c_str());
+		
+		if (!success) 
+			throw FormExcep{ u8"SetWindowText error." };
+
+	}
 
 	params_.title_ = caption;
-	
-	if(self_hWnd_ != NULL)
-		SetWindowText(self_hWnd_, caption.c_str());
 
 }
 
-void FormImpl::Size(const size_t width, const size_t height) noexcept(true){
+void FormImpl::Size(const size_t width, const size_t height) noexcept(false){
 
+	if (WasCreated()) {
+
+		BOOL success = SetWindowPos(self_hWnd_, NULL, params_.x_, params_.y_, width, height, SWP_NOZORDER);
+		
+		if (!success) 
+			throw FormExcep{ u8"SetWindowPos error." };
+
+	}
+	
 	params_.width_ = width;
 	params_.height_ = height;
-
-	if(self_hWnd_ != NULL)
-		SetWindowPos(self_hWnd_, NULL, params_.x_, params_.y_, width, height, SWP_NOZORDER);
 
 	InitFrameInfo(width, height);
 
@@ -178,14 +194,25 @@ int FormImpl::Y() const noexcept(true){
 	return params_.y_;
 }
 
-void FormImpl::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(true){
+void FormImpl::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(false){
+
+	if (WasCreated()) {
+	
+		BOOL success = SetWindowLongPtr(self_hWnd_, GWL_STYLE, static_cast<LONG_PTR>(params_.dwStyle_));
+		
+		if (!success) 
+			throw FormExcep{ u8"Changing form style error." };
+	
+	}
 
 	params_.ex_dwStyle_ = ex_dwStyle;
 	params_.dwStyle_ = dwStyle;
 
-	if (self_hWnd_ != NULL)
-		SetWindowLongPtr(self_hWnd_, GWL_STYLE, static_cast<LONG_PTR>(params_.dwStyle_));
+}
 
+bool FormImpl::WasCreated() const noexcept(true){
+
+	return self_hWnd_ != NULL;
 }
 
 void FormImpl::RegisterFormClass(const std::wstring& class_name)noexcept(false) {
@@ -206,14 +233,15 @@ void FormImpl::RegisterFormClass(const std::wstring& class_name)noexcept(false) 
 	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
 	if (!RegisterClassEx(&wc))
-		throw FormExcep{ u8"RegisterClass exception." };
+		throw FormExcep{ u8"RegisterClass error." };
 
 }
 
 void FormImpl::Create(const std::wstring& class_name, const HWND parent_hWnd)noexcept(false){
 	
 	FormImpl::RegisterFormClass(class_name);
-	this->parent_hWnd_ = parent_hWnd;
+
+	if(WasCreated()) throw FormExcep{ u8"CreateWindowEx error." };
 
 	//Creating Form with default//installed parametrs
 	self_hWnd_ = CreateWindowEx(params_.ex_dwStyle_, 
@@ -229,13 +257,11 @@ void FormImpl::Create(const std::wstring& class_name, const HWND parent_hWnd)noe
 		(HINSTANCE)hInstance_,
 		this);
 
-	if (!self_hWnd_) throw FormExcep{ u8"CreateWindowEx exception." };
-	else {
+	if (!WasCreated()) throw FormExcep{ u8"CreateWindowEx error." };
 
-		SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
-		device_context_ = GetDC(self_hWnd_);
-
-	}
+	this->parent_hWnd_ = parent_hWnd;
+	SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
+	device_context_ = GetDC(self_hWnd_);
 
 }
 
@@ -246,7 +272,7 @@ void FormImpl::Show(int nCmdShow) noexcept(false){
 
 }
 
-WPARAM FormImpl::StartMessageLoop()const noexcept(true) {
+WPARAM FormImpl::StartMessageLoop()const noexcept(false) {
 
 	MSG msg{ 0 };
 
@@ -261,9 +287,17 @@ WPARAM FormImpl::StartMessageLoop()const noexcept(true) {
 
 }
 
-void FormImpl::Destroy() noexcept(true){
+void FormImpl::Destroy() noexcept(false){
+	
+	try {
+	
+		SendMessage(self_hWnd_, WM_CLOSE, NULL, NULL);
+	
+	} catch (const FormExcep& exception) {
 
-	SendMessage(self_hWnd_, WM_CLOSE, NULL, NULL);
+		throw FormExcep{ u8"Destroying error." };
+
+	}
 
 }
 

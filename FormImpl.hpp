@@ -52,9 +52,9 @@ private:
 
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam);
 	FormProc form_proc_;
-
+	bool WasCreated()const noexcept(true);
 	void RegisterFormClass(const std::wstring& class_name)noexcept(false);
-	WPARAM StartMessageLoop()const noexcept(true);
+	WPARAM StartMessageLoop()const noexcept(false);
 
 public:
 
@@ -69,7 +69,7 @@ public:
 
 public:
 
-	explicit FormImpl(const HINSTANCE hInstance)noexcept(true);
+	explicit FormImpl()noexcept(true);
 	~FormImpl()noexcept(true);
 
 public:
@@ -77,20 +77,20 @@ public:
 	void Create(const std::wstring& class_name, const HWND parent_hWnd = NULL)noexcept(false);
 	void Show(int nCmdShow)noexcept(false);
 	void Run()noexcept(false);
-	void Destroy()noexcept(true);
+	void Destroy()noexcept(false);
 
-	void Caption(const std::wstring& caption)noexcept(true);
+	void Caption(const std::wstring& caption)noexcept(false);
 	const HWND Handle()const noexcept(true);
 	void InitFormProc(FormProc messages_processing)noexcept(true);
-	void Position(const int x, const int y)noexcept(true);
-	void Size(const size_t width, const size_t height)noexcept(true);
+	void Position(const int x, const int y)noexcept(false);
+	void Size(const size_t width, const size_t height)noexcept(false);
 	
 	int Width()const noexcept(true);
 	int Height()const noexcept(true);
 	int X()const noexcept(true);
 	int Y()const noexcept(true);
 
-	void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(true);
+	void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(false);
 	void ShowFrame(const void* const frame)noexcept(false);
 
 };

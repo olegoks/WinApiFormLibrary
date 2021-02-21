@@ -20,15 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FormImpl.hpp" />
+    <ClInclude Include="Functions.hpp" />
     <ClInclude Include="Library\Button.hpp" />
     <ClInclude Include="Library\Canvas.hpp" />
     <ClInclude Include="Library\Form.hpp" />
+    <ClInclude Include="Library\FormsLibrary.hpp" />
     <ClInclude Include="Library\FormTypes.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="FormImpl.cpp" />
     <ClCompile Include="Form.cpp" />
     <ClCompile Include="FormTypes.cpp" />
+    <ClCompile Include="Functions.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

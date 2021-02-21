@@ -1,12 +1,12 @@
 #include "Library/Form.hpp"
 #include "FormImpl.hpp"
 
-Form::Form(const HINSTANCE hInstance) noexcept(true):
+Form::Form() noexcept(true):
 	impl_{ nullptr } {
 
 	try {
 
-		impl_ = new FormImpl{ hInstance };
+		impl_ = new FormImpl{};
 
 	} catch (const std::bad_alloc& exception) { }
 
@@ -48,7 +48,7 @@ void Form::ShowFrame(const void* const frame_buffer) noexcept(false){
 
 }
 
-void Form::Caption(const std::wstring& caption) noexcept(true){
+void Form::Caption(const std::wstring& caption) noexcept(false){
 
 	std::any_cast<FormImpl*>(impl_)->Caption(caption);
 
@@ -66,7 +66,7 @@ void Form::InitFormProc(FormProc messages_processing) noexcept(true){
 
 }
 
-void Form::Size(const size_t width, const size_t height) noexcept(true){
+void Form::Size(const size_t width, const size_t height) noexcept(false){
 
 	std::any_cast<FormImpl*>(impl_)->Size(width, height);
 
@@ -92,13 +92,13 @@ EXPIMP int Form::Y() const noexcept(true)
 	return std::any_cast<FormImpl*>(impl_)->Y();
 }
 
-void Form::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(true){
+void Form::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(false){
 
 	std::any_cast<FormImpl*>(impl_)->Style(ex_dwStyle, dwStyle);
 
 }
 
-EXPIMP void Form::Position(int x, int y) noexcept(true){
+EXPIMP void Form::Position(int x, int y) noexcept(false){
 
 	std::any_cast<FormImpl*>(impl_)->Position(x, y);
 
