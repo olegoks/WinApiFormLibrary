@@ -6,6 +6,9 @@
 #define VK_W 87
 #define VK_S 83
 
+
+
+
 ActionType TypeOfAction(Action action, LPARAM lParam)noexcept(true) {
 
 	if (action == Action::KeyDown || action == Action::KeyUp) {
@@ -71,6 +74,7 @@ Action ConvertMessageToAction(UINT message)noexcept(true) {
 	case WM_RBUTTONDOWN: return Action::RMouseDown;
 	case WM_RBUTTONUP: return Action::RMouseUp;
 	case WM_COMMAND: return Action::MenuControlAccel;
+	case WM_GETMINMAXINFO: return Action::Resize;
 	default:return Action::Nothing;
 
 	}
@@ -97,9 +101,9 @@ Message::Message(UINT Message, WPARAM wParam, LPARAM lParam) noexcept(true):
 	Action action = ConvertMessageToAction(Message);
 	key_action_.action_ = action;
 
-	ActionType action_type = TypeOfAction(action, lParam_);
+	action_type_ = TypeOfAction(action, lParam_);
 
-	switch (action_type) {
+	switch (action_type_) {
 	case ActionType::Keyboard:
 
 		key_action_.key_ = ConvertWParamToKey(wParam_);

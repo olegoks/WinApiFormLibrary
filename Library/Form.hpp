@@ -7,7 +7,7 @@
 
 #include "FormTypes.hpp"
 
-EXPIMP class Form {
+EXPIMP class Form{
 private:
 
 	std::any impl_;
@@ -19,26 +19,24 @@ public:
 
 protected:
 
-	//void RegisterFormClass(const std::wstring& class_name)noexcept(false);
-	EXPIMP void Create(const std::wstring& class_name, const HWND parent_hWnd = NULL)noexcept(false);
-	EXPIMP void Show(int nCmdShow)noexcept(false);
-	EXPIMP void Run()noexcept(false);
-	EXPIMP void Destroy()noexcept(false);
-	EXPIMP void ShowFrame(const void* const frame_buffer)noexcept(false);
+	EXPIMP void Create(const HWND parent_hWnd = NULL);
+	EXPIMP void Show(int nCmdShow);
+	EXPIMP void Run();
+	EXPIMP void Destroy();
 
 public:
 
-	EXPIMP void Caption(const std::wstring& caption)noexcept(false);
-	EXPIMP const HWND Handle()const noexcept(true);
-	EXPIMP void InitFormProc(FormProc messages_processing)noexcept(true);
-	EXPIMP void Size(const size_t width, const size_t height)noexcept(false);
-	EXPIMP int Width()const noexcept(true);
-	EXPIMP int Height()const noexcept(true);
-	EXPIMP int X()const noexcept(true);
-	EXPIMP int Y()const noexcept(true);
+	EXPIMP void ChangeCaption(const std::wstring& caption)noexcept(false);
+	EXPIMP const HWND GetHandle()const noexcept(true);
+	EXPIMP void SetProcessFunction(ProcessMessage messages_processing)noexcept(true);
+	EXPIMP void ChangeSize(const size_t width, const size_t height)noexcept(false);
+	EXPIMP int GetWidth()const noexcept(true);
+	EXPIMP int GetHeight()const noexcept(true);
+	EXPIMP int GetX()const noexcept(true);
+	EXPIMP int GetY()const noexcept(true);
 
-	EXPIMP void Style(DWORD ex_dwStyle, DWORD dwStyle)noexcept(false);
-	EXPIMP void Position(int x, int y)noexcept(false);
+	EXPIMP void ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle)noexcept(false);
+	EXPIMP void ChangePosition(int x, int y)noexcept(false);
 
 };
 

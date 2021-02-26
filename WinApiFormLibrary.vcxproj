@@ -19,17 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FormImpl.hpp" />
+    <ClInclude Include="AbstractComponent.hpp" />
+    <ClInclude Include="ButtonImplementation.hpp" />
+    <ClInclude Include="EditImplementation.hpp" />
+    <ClInclude Include="FormImplementation.hpp" />
     <ClInclude Include="Functions.hpp" />
     <ClInclude Include="Library\Button.hpp" />
     <ClInclude Include="Library\Canvas.hpp" />
+    <ClInclude Include="Library\CanvasImplementation.hpp" />
+    <ClInclude Include="Library\Edit.hpp" />
+    <ClInclude Include="Library\FileDialog.hpp" />
     <ClInclude Include="Library\Form.hpp" />
     <ClInclude Include="Library\FormsLibrary.hpp" />
     <ClInclude Include="Library\FormTypes.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractComponent.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="FormImpl.cpp" />
+    <ClCompile Include="CanvasImplementation.cpp" />
+    <ClCompile Include="Edit.cpp" />
+    <ClCompile Include="EditImplementation.cpp" />
+    <ClCompile Include="FileDialog.cpp" />
+    <ClCompile Include="FormImplementation.cpp" />
     <ClCompile Include="Form.cpp" />
     <ClCompile Include="FormTypes.cpp" />
     <ClCompile Include="Functions.cpp" />
@@ -117,7 +129,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\;$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +145,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\;$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,7 +161,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\;$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,7 +177,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\;$(MSBuildProjectDirectory)\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

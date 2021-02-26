@@ -30,6 +30,7 @@ Debug/
 *.la
 *.a
 *.lib
+Library\*.lib
 
 # Executables
 *.exe

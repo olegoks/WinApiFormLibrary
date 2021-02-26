@@ -7,6 +7,7 @@
 #include <functional>
 #include <exception>
 
+
 #define CALLBACK __stdcall
 
 #define COMPILING_DLL
@@ -46,7 +47,8 @@
 		RMouseDown,
 		RMouseUp,
 		MenuControlAccel,
-		ButtonClicked
+		ButtonClicked,
+		Resize
 
 	};
 
@@ -87,6 +89,7 @@
 		int y_;
 		int control_id_;
 		HWND hWnd_;
+		ActionType action_type_;
 
 	public:
 
@@ -101,6 +104,7 @@
 
 		}
 		
+		ActionType GetActionType()const noexcept { return action_type_; };
 		Action GetAction()const noexcept(true) { return key_action_.action_; };
 		Key GetKey()const noexcept(true) { return key_action_.key_; };
 		HWND GethWnd()const noexcept(true) { return hWnd_; };
@@ -111,14 +115,14 @@
 
 	};
 
-	class FormExcep final : protected std::exception {
+	class ComponentException final : protected std::exception {
 	private:
 
 		std::string message_;
 
 	public:
 
-		explicit FormExcep(std::string&& message)noexcept(true) :
+		explicit ComponentException(std::string&& message)noexcept(true) :
 			std::exception{ },
 			message_{ std::move( message ) } {
 
@@ -126,7 +130,7 @@
 
 		}
 
-		explicit FormExcep(const std::string& message)noexcept(true):
+		explicit ComponentException(const std::string& message)noexcept(true):
 			std::exception{},
 			message_{ message }{
 
@@ -137,7 +141,7 @@
 
 	};
 
-	using FormProc = std::function<bool(Message&)>;
+	using ProcessMessage = std::function<bool(Message&)>;
 
 	class Pixel final {
 	public:
@@ -174,5 +178,9 @@
 		rgba rgba_ = { 0 };
 
 	};
+
+	using Color = Pixel;
+	using CANVASINFO = BITMAPINFO;
+
 
 #endif //WINDOW_TYPES_HPP

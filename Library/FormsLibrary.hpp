@@ -7,5 +7,7 @@
 #include <Button.hpp>
 #include <Canvas.hpp>
 #include <FormTypes.hpp>
+#include <FileDialog.hpp>
+#include <Edit.hpp>
 
 #endif 

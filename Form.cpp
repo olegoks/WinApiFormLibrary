@@ -1,106 +1,101 @@
 #include "Library/Form.hpp"
-#include "FormImpl.hpp"
+#include "FormImplementation.hpp"
 
-Form::Form() noexcept(true):
+EXPIMP Form::Form() noexcept(true):
 	impl_{ nullptr } {
 
 	try {
 
-		impl_ = new FormImpl{};
+		impl_ = new FormImplementation{};
 
 	} catch (const std::bad_alloc& exception) { }
 
 }
 
-Form::~Form()noexcept(true){
+EXPIMP Form::~Form()noexcept(true){
 
-	if (std::any_cast<FormImpl*>(impl_) != nullptr)
-		delete std::any_cast<FormImpl*>(impl_);
+	if (std::any_cast<FormImplementation*>(impl_) != nullptr)
+		delete std::any_cast<FormImplementation*>(impl_);
 	
 }
-void Form::Create(const std::wstring& class_name, const HWND parent_hWnd) noexcept(false){
+EXPIMP void Form::Create(const HWND parent_hWnd){
 
-	std::any_cast<FormImpl*>(impl_)->Create(class_name, parent_hWnd);
-
-}
-
-void Form::Show(int nCmdShow) noexcept(false){
-
-	std::any_cast<FormImpl*>(impl_)->Show(nCmdShow);
+	std::any_cast<FormImplementation*>(impl_)->Create(parent_hWnd);
 
 }
 
-void Form::Run() noexcept(false){
+EXPIMP void Form::Show(int nCmdShow){
 
-	std::any_cast<FormImpl*>(impl_)->Run();
-
-}
-
-void Form::Destroy() noexcept(false){
-
-	std::any_cast<FormImpl*>(impl_)->Destroy();
+	std::any_cast<FormImplementation*>(impl_)->Show(nCmdShow);
 
 }
 
-void Form::ShowFrame(const void* const frame_buffer) noexcept(false){
+EXPIMP void Form::Run() noexcept(false){
 
-	std::any_cast<FormImpl*>(impl_)->ShowFrame(frame_buffer);
-
-}
-
-void Form::Caption(const std::wstring& caption) noexcept(false){
-
-	std::any_cast<FormImpl*>(impl_)->Caption(caption);
+	std::any_cast<FormImplementation*>(impl_)->Run();
 
 }
 
-const HWND Form::Handle() const noexcept(true){
+EXPIMP void Form::Destroy() noexcept(false){
+
+	std::any_cast<FormImplementation*>(impl_)->Destroy();
+
+}
+
+EXPIMP void Form::ChangeCaption(const std::wstring& caption){
+
+	std::any_cast<FormImplementation*>(impl_)->ChangeCaption(caption);
+
+}
+
+EXPIMP const HWND Form::GetHandle() const noexcept{
 	
-	return std::any_cast<FormImpl*>(impl_)->Handle();
+	return std::any_cast<FormImplementation*>(impl_)->GetHandle();
 
 }
 
-void Form::InitFormProc(FormProc messages_processing) noexcept(true){
 
-	std::any_cast<FormImpl*>(impl_)->InitFormProc(messages_processing);
+EXPIMP void Form::SetProcessFunction(ProcessMessage messages_processing) noexcept{
 
-}
-
-void Form::Size(const size_t width, const size_t height) noexcept(false){
-
-	std::any_cast<FormImpl*>(impl_)->Size(width, height);
+	std::any_cast<FormImplementation*>(impl_)->SetProcessFunction(messages_processing);
 
 }
 
-EXPIMP int Form::Width() const noexcept(true){
+EXPIMP void Form::ChangeSize(const size_t width, const size_t height){
 
-	return std::any_cast<FormImpl*>(impl_)->Width();
+	std::any_cast<FormImplementation*>(impl_)->ChangeSize(width, height);
+
 }
 
-EXPIMP int Form::Height() const noexcept(true)
+EXPIMP int Form::GetWidth() const noexcept{
+
+	return std::any_cast<FormImplementation*>(impl_)->GetWidth();
+}
+
+EXPIMP int Form::GetHeight() const noexcept
 {
-	return std::any_cast<FormImpl*>(impl_)->Height();
+	return std::any_cast<FormImplementation*>(impl_)->GetHeight();
 }
 
-EXPIMP int Form::X() const noexcept(true)
+EXPIMP int Form::GetX() const noexcept
 {
-	return std::any_cast<FormImpl*>(impl_)->X();
+	return std::any_cast<FormImplementation*>(impl_)->GetX();
 }
 
-EXPIMP int Form::Y() const noexcept(true)
+EXPIMP int Form::GetY() const noexcept
 {
-	return std::any_cast<FormImpl*>(impl_)->Y();
+	return std::any_cast<FormImplementation*>(impl_)->GetY();
 }
 
-void Form::Style(DWORD ex_dwStyle, DWORD dwStyle) noexcept(false){
+void Form::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
 
-	std::any_cast<FormImpl*>(impl_)->Style(ex_dwStyle, dwStyle);
+	std::any_cast<FormImplementation*>(impl_)->ChangeStyle(ex_dwStyle, dwStyle);
 
 }
 
-EXPIMP void Form::Position(int x, int y) noexcept(false){
+EXPIMP void Form::ChangePosition(int x, int y) {
 
-	std::any_cast<FormImpl*>(impl_)->Position(x, y);
+	std::any_cast<FormImplementation*>(impl_)->ChangePosition(x, y);
 
 }
 
