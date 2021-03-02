@@ -17,9 +17,9 @@ public:
 		
 			AbstractComponent::ChangeStyle(NULL, WS_CHILDWINDOW | WS_VISIBLE | WS_BORDER | ES_LEFT);
 		
-		} catch (const ComponentException& exception) {
+		} catch (const ComponentException&) {
 
-			throw;
+			throw ComponentException{ u8"Changing style for edit error." };
 
 		}
 
@@ -31,9 +31,9 @@ public:
 
 			AbstractComponent::CreateComponent(parent_hWnd, L"edit");
 		
-		} catch (const ComponentException& exception) {
+		} catch (const ComponentException&) {
 
-			throw;
+			throw ComponentException{ u8"Creating edit exception." };
 
 		}
 
@@ -45,24 +45,24 @@ public:
 		
 			AbstractComponent::ShowComponent(SW_SHOW);
 		
-		} catch (const ComponentException& exception) {
+		} catch (const ComponentException&) {
 
-			throw;
+			throw ComponentException{ u8"Edit show error." };
 
 		}
 
 	}
 
-	std::wstring GetText()const {
+	std::string GetText()const {
 
-		wchar_t text[256];
+		char text[256];
 
-		int success = GetWindowTextW(AbstractComponent::GetHandle(), text, 256);
+		int success = GetWindowTextA(AbstractComponent::GetHandle(), text, 256);
 
 		if (!success)
 			throw ComponentException{ u8"GetWindowText error." };
 
-		return std::wstring{ text };
+		return std::string{ text };
 
 	}
 
@@ -72,9 +72,9 @@ public:
 			
 			AbstractComponent::DestroyComponent();
 
-		} catch (const ComponentException& exception) {
+		} catch (const ComponentException&) {
 
-			throw;
+			throw ComponentException{ u8"Destroying edit error." };
 
 		}
 

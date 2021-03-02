@@ -67,7 +67,11 @@ Canvas::Canvas(): impl_{ nullptr } {
 
         impl_ = new CanvasImplementation{};
 
-    } catch (const std::bad_alloc& exception) {}
+    } catch (const std::bad_alloc&) {
+    
+        throw ComponentException{ u8"Canvas allocation memory error." };
+
+    }
 
 }
 

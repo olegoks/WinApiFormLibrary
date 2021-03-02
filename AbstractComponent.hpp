@@ -15,7 +15,7 @@ private:
 	int x_		= kDefaultX;
 	int y_		= kDefaultY;
 
-	ProcessMessage process_messages_ = [this](Message& message)noexcept->bool { 
+	ProcessMessage process_messages_ = [](Message& message)noexcept->bool { 
 		
 		return false;
 	
@@ -57,7 +57,7 @@ public:
 	static inline const std::wstring kDefaultClassName = L"Component";
 
 	void SetProcessFunction(ProcessMessage messages_processing)noexcept;
-	void ChangeSize(const size_t width, const size_t height);
+	void ChangeSize(const int width, const int height);
 	void ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle);
 	void ChangePosition(const int x, const int y);
 	void ChangeText(const std::wstring& text);

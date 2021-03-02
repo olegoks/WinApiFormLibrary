@@ -215,9 +215,9 @@ void FormImplementation::ChangeCaption(const std::wstring& caption){
 	
 		AbstractComponent::ChangeText(caption);
 	
-	} catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Form changing size error." };
 
 	}
 
@@ -234,9 +234,9 @@ void FormImplementation::Create(const HWND parent_hWnd){
 		//AbstractComponent::ChangeStyle(ex_dwStyle_, dwStyle_/*WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN*/);
 		AbstractComponent::CreateComponent(parent_hWnd);
 
-	} catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Creating form error," };
 
 	}
 

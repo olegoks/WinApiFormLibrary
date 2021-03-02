@@ -14,11 +14,18 @@ public:
 		AbstractComponent::AbstractComponent{},
 		hBitmap_{ NULL }{
 
-		AbstractComponent::ChangeStyle(NULL, BS_DEFPUSHBUTTON | WS_CHILDWINDOW | WS_VISIBLE | WS_BORDER /*| BS_BITMAP*/);
-	
+		try {
+
+			AbstractComponent::ChangeStyle(NULL, BS_DEFPUSHBUTTON | WS_CHILDWINDOW | WS_VISIBLE | WS_BORDER /*| BS_BITMAP*/);
+		
+		}
+		catch  (const ComponentException&) {
+
+			throw ComponentException{ u8"Set button style exception." };
+
+		}
+
 	}
-
-
 
 	void Image(const std::wstring& bitmap_path) {
 
@@ -36,17 +43,17 @@ public:
 			
 				AbstractComponent::ChangeStyle(current_ex_style, current_ex_style | BS_BITMAP);
 			
-			} catch (const ComponentException& exception) {
+			} catch (const ComponentException&) {
 
-				throw exception;
+				throw ComponentException{ u8"Changing button style for loading image error." };
 
 			}
 
 			SendMessage(GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
 		
 		}
-	}
 
+	}
 
 	void ChangeText(const std::wstring& text) {
 
@@ -56,18 +63,32 @@ public:
 		
 		} catch (const ComponentException& exception) {
 
-			throw;
+			throw exception;
 
 		}
 
 	}
 
 	void Create(const HWND parent_hWnd = NULL)override {
+		
+		try {
+		
+			AbstractComponent::CreateComponent(parent_hWnd, L"Button");
+		
+		} catch (const ComponentException&) {
 
-		AbstractComponent::CreateComponent(parent_hWnd, L"Button");
+			throw ComponentException{ u8"Creating button error." };
 
-		if(hBitmap_ != NULL)
+		}
+
+		if (hBitmap_ != NULL)
 			SendMessage(AbstractComponent::GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
+
+	}
+
+	HWND GetHandle()const noexcept {
+
+		return AbstractComponent::GetHandle();
 
 	}
 
@@ -78,6 +99,16 @@ public:
 	}
 
 	void Destroy()override {
+
+		try {
+		
+			AbstractComponent::DestroyComponent();
+		
+		} catch (const ComponentException&) {
+
+			throw ComponentException{ u8"Destroying button error." };
+
+		}
 
 	}
 

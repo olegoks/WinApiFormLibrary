@@ -1,88 +1,92 @@
 #include "Library/Form.hpp"
 #include "FormImplementation.hpp"
 
-EXPIMP Form::Form() noexcept(true):
+Form::Form():
 	impl_{ nullptr } {
 
 	try {
 
 		impl_ = new FormImplementation{};
 
-	} catch (const std::bad_alloc& exception) { }
+	} catch (const std::bad_alloc&) { 
+	
+		throw ComponentException{ u8"Form allocation memory error." };
+
+	}
 
 }
 
-EXPIMP Form::~Form()noexcept(true){
+Form::~Form()noexcept(true){
 
 	if (std::any_cast<FormImplementation*>(impl_) != nullptr)
 		delete std::any_cast<FormImplementation*>(impl_);
 	
 }
-EXPIMP void Form::Create(const HWND parent_hWnd){
+void Form::Create(const HWND parent_hWnd){
 
 	std::any_cast<FormImplementation*>(impl_)->Create(parent_hWnd);
 
 }
 
-EXPIMP void Form::Show(int nCmdShow){
+void Form::Show(int nCmdShow){
 
 	std::any_cast<FormImplementation*>(impl_)->Show(nCmdShow);
 
 }
 
-EXPIMP void Form::Run() noexcept(false){
+void Form::Run() noexcept(false){
 
 	std::any_cast<FormImplementation*>(impl_)->Run();
 
 }
 
-EXPIMP void Form::Destroy() noexcept(false){
+void Form::Destroy() noexcept(false){
 
 	std::any_cast<FormImplementation*>(impl_)->Destroy();
 
 }
 
-EXPIMP void Form::ChangeCaption(const std::wstring& caption){
+void Form::ChangeCaption(const std::wstring& caption){
 
 	std::any_cast<FormImplementation*>(impl_)->ChangeCaption(caption);
 
 }
 
-EXPIMP const HWND Form::GetHandle() const noexcept{
+const HWND Form::GetHandle() const noexcept{
 	
 	return std::any_cast<FormImplementation*>(impl_)->GetHandle();
 
 }
 
 
-EXPIMP void Form::SetProcessFunction(ProcessMessage messages_processing) noexcept{
+void Form::SetProcessFunction(ProcessMessage messages_processing) noexcept{
 
 	std::any_cast<FormImplementation*>(impl_)->SetProcessFunction(messages_processing);
 
 }
 
-EXPIMP void Form::ChangeSize(const size_t width, const size_t height){
+void Form::ChangeSize(const int width, const int height){
 
 	std::any_cast<FormImplementation*>(impl_)->ChangeSize(width, height);
 
 }
 
-EXPIMP int Form::GetWidth() const noexcept{
+int Form::GetWidth() const noexcept{
 
 	return std::any_cast<FormImplementation*>(impl_)->GetWidth();
 }
 
-EXPIMP int Form::GetHeight() const noexcept
+int Form::GetHeight() const noexcept
 {
 	return std::any_cast<FormImplementation*>(impl_)->GetHeight();
 }
 
-EXPIMP int Form::GetX() const noexcept
+int Form::GetX() const noexcept
 {
 	return std::any_cast<FormImplementation*>(impl_)->GetX();
 }
 
-EXPIMP int Form::GetY() const noexcept
+int Form::GetY() const noexcept
 {
 	return std::any_cast<FormImplementation*>(impl_)->GetY();
 }
@@ -93,7 +97,7 @@ void Form::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
 
 }
 
-EXPIMP void Form::ChangePosition(int x, int y) {
+void Form::ChangePosition(int x, int y) {
 
 	std::any_cast<FormImplementation*>(impl_)->ChangePosition(x, y);
 

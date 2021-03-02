@@ -28,6 +28,9 @@
     <Filter Include="Edit">
       <UniqueIdentifier>{0947fa64-f274-40d8-9270-9b53ad204d0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Static">
+      <UniqueIdentifier>{c6f2f262-3169-42f6-b043-243c4547aac9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\FormTypes.hpp">
@@ -67,6 +70,12 @@
     <ClInclude Include="Library\Edit.hpp">
       <Filter>LibraryInterface</Filter>
     </ClInclude>
+    <ClInclude Include="StaticImplementation.hpp">
+      <Filter>Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Static.hpp">
+      <Filter>LibraryInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FormTypes.cpp">
@@ -96,11 +105,11 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Canvas</Filter>
     </ClCompile>
-    <ClCompile Include="EditImplementation.cpp">
-      <Filter>Edit</Filter>
-    </ClCompile>
     <ClCompile Include="Edit.cpp">
       <Filter>Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="Static.cpp">
+      <Filter>Static</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

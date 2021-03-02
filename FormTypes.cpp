@@ -44,7 +44,7 @@ ActionType TypeOfAction(Action action, LPARAM lParam)noexcept(true) {
 	return ActionType::Nothing;
 }
 
-Key ConvertWParamToKey(UINT wParam)noexcept(true) {
+Key ConvertWParamToKey(WPARAM wParam)noexcept(true) {
 
 	switch (wParam) {
 

@@ -7,8 +7,11 @@ Edit::Edit() :impl_{ nullptr } {
 
 		impl_ = new EditImplementation{};
 
+	} catch (const std::bad_alloc&) {
+	
+		throw ComponentException{ u8"Edit allocation memory exception." };
+	
 	}
-	catch (const std::bad_alloc& exception) {}
 
 }
 
@@ -25,7 +28,7 @@ void Edit::SetProcessFunction(ProcessMessage process_message) noexcept{
 
 }
 
-std::wstring Edit::GetText() const {
+std::string Edit::GetText() const {
 
 	return std::any_cast<EditImplementation*>(impl_)->GetText();
 

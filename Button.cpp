@@ -7,8 +7,10 @@ Button::Button() : impl_{ nullptr } {
 
 		impl_ = new ButtonImplementation{};
 
-	} catch (const std::bad_alloc& exception) {
+	} catch (const std::bad_alloc&) {
 	
+		throw ComponentException{ u8"Button allocation memory error." };
+
 	}
 
 }
@@ -20,22 +22,22 @@ Button::~Button()noexcept {
 
 }
 
-EXPIMP void Button::SetProcessFunction(ProcessMessage messages_processing) noexcept{
+void Button::SetProcessFunction(ProcessMessage messages_processing) noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->SetProcessFunction(messages_processing);
 }
 
-EXPIMP void Button::ChangeSize(const size_t width, const size_t height)
+void Button::ChangeSize(const int width, const int height)
 {
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangeSize(width, height);
 }
 
-EXPIMP void Button::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
+void Button::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
 
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangeStyle(ex_dwStyle, dwStyle);
 }
 
-EXPIMP void Button::ChangePosition(const int x, const int y){
+void Button::ChangePosition(const int x, const int y){
 
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangePosition(x, y);
 }
@@ -50,28 +52,33 @@ void Button::ChangeText(const std::wstring& text){
 	std::any_cast<ButtonImplementation*>(impl_)->ChangeText(text);
 }
 
-EXPIMP bool Button::WasCreated() const noexcept{
+bool Button::WasCreated() const noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->WasCreated();
 }
 
 
-EXPIMP int Button::GetHeight() const noexcept{
+HWND Button::GetHandle() const noexcept{
+
+	return std::any_cast<ButtonImplementation*>(impl_)->GetHandle();
+}
+
+int Button::GetHeight() const noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->GetHeight();
 }
 
-EXPIMP int Button::GetWidth() const noexcept{
+int Button::GetWidth() const noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->GetWidth();
 }
 
-EXPIMP int Button::GetX() const noexcept{
+int Button::GetX() const noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->GetX();
 }
 
-EXPIMP int Button::GetY() const noexcept{
+int Button::GetY() const noexcept{
 
 	return std::any_cast<ButtonImplementation*>(impl_)->GetY();
 }

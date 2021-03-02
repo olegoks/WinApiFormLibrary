@@ -18,8 +18,7 @@ CanvasImplementation::CanvasImplementation():
 		throw ComponentException{ std::string{ u8"Bad allocation memory: " }
 			+ std::string{ new_exception.what() } };
 
-	}
-	catch (const ComponentException& form_exception) {
+	} catch (const ComponentException&) {
 
 		throw ComponentException{ u8"Canvas constructor error." };
 
@@ -34,9 +33,9 @@ void CanvasImplementation::ChangePosition(const int x, const int y)noexcept(fals
 		AbstractComponent::ChangePosition(x, y);
 
 	}
-	catch (const ComponentException& exception) {
+	catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Canvas changing position error." };
 
 	}
 
@@ -48,9 +47,9 @@ void CanvasImplementation::ChangeSize(const int width, const int height){
 
 		AbstractComponent::ChangeSize(width, height);
 
-	} catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 	
-		throw;
+		throw ComponentException{ u8"Canvas changing style error." };
 	
 	}
 
@@ -59,7 +58,7 @@ void CanvasImplementation::ChangeSize(const int width, const int height){
 }
 
 
-void CanvasImplementation::Fill(const Color& color)noexcept(true) {
+void CanvasImplementation::Fill(const Color& color)noexcept{
 
 	std::for_each(buffer_, buffer_ + pixels_number_, [&color](Pixel& pixel)noexcept->void {
 
@@ -120,10 +119,9 @@ void CanvasImplementation::Flush() {
 
 		ShowFrame(buffer_);
 
-	}
-	catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Canvas show error." };
 
 	}
 
@@ -139,9 +137,9 @@ void CanvasImplementation::Create(const HWND parent_hWnd) {
 
 		Fill(kDefaultBackgroundColor);
 
-	} catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Creating canvas error." };
 
 	}
 
@@ -160,9 +158,9 @@ void CanvasImplementation::Show(int nCmdShow) {
 		Flush();
 
 	}
-	catch (const ComponentException& exception) {
+	catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Canvas show error." };
 
 	}
 
@@ -174,9 +172,9 @@ void CanvasImplementation::Destroy(){
 	
 		AbstractComponent::DestroyComponent();
 	
-	} catch (const ComponentException& exception) {
+	} catch (const ComponentException&) {
 
-		throw;
+		throw ComponentException{ u8"Destroy component error." };
 
 	}
 
@@ -207,7 +205,7 @@ void CanvasImplementation::ShowFrame(const void* const frame_buffer)noexcept(fal
 
 }
 
-void CanvasImplementation::InitCanvasInfo(const int width, const int height) noexcept(true){
+void CanvasImplementation::InitCanvasInfo(const int width, const int height) noexcept{
 
 	canvas_info_ = CANVASINFO{ 0 };
 	canvas_info_.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);

@@ -6,7 +6,7 @@
 
 using FileDialogException = ComponentException;
 
-EXPIMP class FileDialog final{
+class EXPIMP FileDialog final{
 private:
 
 	OPENFILENAME init_struct_;
@@ -15,9 +15,9 @@ private:
 
 public:
 
-	EXPIMP explicit FileDialog()noexcept;
-	EXPIMP void FindFile(const HWND parent_hWnd);
-	EXPIMP std::filesystem::path GetPath()const noexcept;
-	EXPIMP std::wstring GetName()const noexcept;
+	explicit FileDialog()noexcept;
+	void FindFile(const HWND parent_hWnd);
+	std::filesystem::path GetPath()const noexcept;
+	std::wstring GetName()const noexcept;
 
 };

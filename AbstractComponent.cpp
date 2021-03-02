@@ -61,7 +61,7 @@ void AbstractComponent::DestroyComponent(){
 		SendMessage(self_hWnd_, WM_CLOSE, NULL, NULL);
 
 	}
-	catch (const ComponentException& exception) {
+	catch (const ComponentException&) {
 
 		throw ComponentException{ u8"Destroying error." };
 
@@ -102,7 +102,7 @@ void AbstractComponent::ChangePosition(const int x, const int y) noexcept(false)
 
 }
 
-void AbstractComponent::ChangeSize(const size_t width, const size_t height) {
+void AbstractComponent::ChangeSize(const int width, const int height) {
 
 	if (WasCreated()) {
 
@@ -188,7 +188,7 @@ void AbstractComponent::CreateComponent(const HWND parent_hWnd, const std::wstri
 	parent_hWnd_ = parent_hWnd;
 
 	SetLastError(NULL);
-	int last_value = SetWindowLongPtr(GetHandle(), GWLP_USERDATA, (PointerType)this);
+	LONG_PTR last_value = SetWindowLongPtr(GetHandle(), GWLP_USERDATA, (PointerType)this);
 
 	if (last_value == 0) {
 
@@ -239,9 +239,8 @@ LRESULT CALLBACK AbstractComponent::ComponentProc(HWND hWnd, UINT message, WPARA
 		PostQuitMessage(0);
 		break;
 
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-
 	}
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
 
 }

@@ -6,7 +6,7 @@
 #include <any>
 #include <FormTypes.hpp>
 
-class Edit {
+class EXPIMP Edit {
 private:
 
 	std::any impl_;
@@ -17,7 +17,7 @@ public:
 	~Edit()noexcept;
 
 	void SetProcessFunction(ProcessMessage process_message)noexcept;
-	std::wstring GetText()const;
+	std::string GetText()const;
 	void ChangeText(const std::wstring& text);
 	void ChangeSize(const int width, const int height);
 	void ChangePosition(const int x, const int y);
