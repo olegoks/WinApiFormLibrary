@@ -2,7 +2,7 @@
 #include "FormImplementation.hpp"
 
 Form::Form():
-	impl_{ nullptr } {
+	impl_{ } {
 
 	try {
 
@@ -18,9 +18,25 @@ Form::Form():
 
 Form::~Form()noexcept(true){
 
-	if (std::any_cast<FormImplementation*>(impl_) != nullptr)
+	if (impl_.has_value())
 		delete std::any_cast<FormImplementation*>(impl_);
 	
+}
+Form::Form(Form&& move_form) noexcept:
+	impl_{ } {
+
+	std::swap(impl_, move_form.impl_);
+
+}
+
+Form& Form::operator=(Form&& move_form) noexcept{
+
+	if (&move_form == this) return *this;
+
+	std::swap(impl_, move_form.impl_);
+
+	return *this;
+
 }
 void Form::Create(const HWND parent_hWnd){
 

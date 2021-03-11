@@ -16,7 +16,7 @@ public:
 
 		try {
 
-			AbstractComponent::ChangeStyle(NULL, BS_DEFPUSHBUTTON | WS_CHILDWINDOW | WS_VISIBLE | WS_BORDER /*| BS_BITMAP*/);
+			AbstractComponent::ChangeStyle(NULL, BS_DEFPUSHBUTTON | WS_CHILDWINDOW | WS_VISIBLE | WS_BORDER);
 		
 		}
 		catch  (const ComponentException&) {
@@ -29,30 +29,30 @@ public:
 
 	void Image(const std::wstring& bitmap_path) {
 
+		if (!WasCreated()) 
+			throw ComponentException{ u8"Button was no created." };
+
 		hBitmap_ = (HBITMAP)LoadImage(NULL, bitmap_path.c_str(), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
 
 		if (hBitmap_ == NULL)
 			throw ComponentException{ u8"LoadImage error." };
-
-		if (WasCreated()) {
 		
-			DWORD current_style = AbstractComponent::GetStyle();
-			DWORD current_ex_style = AbstractComponent::GetExtendedStyle();
+		DWORD current_style = AbstractComponent::GetStyle();
+		DWORD current_ex_style = AbstractComponent::GetExtendedStyle();
 			
-			try {
+		try {
 			
-				AbstractComponent::ChangeStyle(current_ex_style, current_ex_style | BS_BITMAP);
+			AbstractComponent::ChangeStyle(current_ex_style, current_ex_style | BS_BITMAP );
 			
-			} catch (const ComponentException&) {
+		} catch (const ComponentException&) {
 
-				throw ComponentException{ u8"Changing button style for loading image error." };
+			throw ComponentException{ u8"Changing button style for loading image error." };
 
-			}
-
-			SendMessage(GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
-		
 		}
 
+		SendMessageA(GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
+		AbstractComponent::ShowComponent();
+		
 	}
 
 	void ChangeText(const std::wstring& text) {
@@ -60,10 +60,10 @@ public:
 		try {
 		
 			AbstractComponent::ChangeText(text);
-		
-		} catch (const ComponentException& exception) {
-
-			throw exception;
+			
+		} catch (ComponentException& exception) {
+			 
+			throw ComponentException{ std::move(exception) };
 
 		}
 
@@ -81,9 +81,11 @@ public:
 
 		}
 
-		if (hBitmap_ != NULL)
-			SendMessage(AbstractComponent::GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
-
+		if (hBitmap_ != NULL) {
+		
+			LRESULT result = SendMessage(AbstractComponent::GetHandle(), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap_);
+		
+		}
 	}
 
 	HWND GetHandle()const noexcept {

@@ -1,7 +1,7 @@
 #include "Edit.hpp"
 #include <EditImplementation.hpp>
 
-Edit::Edit() :impl_{ nullptr } {
+Edit::Edit() :impl_{ } {
 
 	try {
 
@@ -17,8 +17,25 @@ Edit::Edit() :impl_{ nullptr } {
 
 Edit::~Edit() noexcept{
 
-	if (std::any_cast<EditImplementation*>(impl_) != nullptr)
+	if (impl_.has_value())
 		delete std::any_cast<EditImplementation*>(impl_);
+
+}
+
+Edit::Edit(Edit&& move_edit) noexcept:
+	impl_{ } {
+
+	std::swap(impl_, move_edit.impl_);
+
+}
+
+Edit& Edit::operator=(Edit&& move_edit) noexcept{
+
+	if (&move_edit == this) return *this;
+
+	std::swap(impl_, move_edit.impl_);
+
+	return *this;
 
 }
 

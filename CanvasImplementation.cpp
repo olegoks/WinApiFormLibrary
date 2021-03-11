@@ -3,7 +3,7 @@
 CanvasImplementation::CanvasImplementation():
 	AbstractComponent::AbstractComponent{ },
 	buffer_{ nullptr },
-	pixels_number_{  GetWidth() * GetHeight() },
+	pixels_number_{ static_cast<int>(GetWidth() * GetHeight()) },
 	canvas_info_{ 0 },
 	device_context_{ NULL }{
 
@@ -32,8 +32,7 @@ void CanvasImplementation::ChangePosition(const int x, const int y)noexcept(fals
 
 		AbstractComponent::ChangePosition(x, y);
 
-	}
-	catch (const ComponentException&) {
+	} catch (const ComponentException&) {
 
 		throw ComponentException{ u8"Canvas changing position error." };
 
@@ -43,12 +42,25 @@ void CanvasImplementation::ChangePosition(const int x, const int y)noexcept(fals
 
 void CanvasImplementation::ChangeSize(const int width, const int height){
 
+	Pixel* new_buffer = nullptr;
+
 	try {
 
+		const uint64_t new_pixels_number = (uint64_t)width * (uint64_t)height;
+		new_buffer = new Pixel[new_pixels_number];
 		AbstractComponent::ChangeSize(width, height);
+		delete[] buffer_;
+		buffer_ = new_buffer;
+		pixels_number_ = (int)new_pixels_number;
+
+	} catch (const std::bad_alloc& bad_alloc) {
+
+		throw ComponentException{ u8"Bad memory allocation error." };
 
 	} catch (const ComponentException&) {
-	
+
+		delete[] new_buffer;
+
 		throw ComponentException{ u8"Canvas changing style error." };
 	
 	}
@@ -66,6 +78,16 @@ void CanvasImplementation::Fill(const Color& color)noexcept{
 
 		});
 
+}
+
+const uint64_t CanvasImplementation::GetWidth() const noexcept
+{
+	return AbstractComponent::GetWidth();
+}
+
+const uint64_t CanvasImplementation::GetHeight() const noexcept
+{
+	return AbstractComponent::GetHeight();
 }
 
 void CanvasImplementation::Line(int x, int y, int _x, int _y, const Color& color)noexcept {
@@ -102,7 +124,6 @@ void CanvasImplementation::Line(int x, int y, int _x, int _y, const Color& color
 	}
 
 }
-
 
 void CanvasImplementation::SetPixel(int x, int y, const Pixel& pixel)noexcept {
 
@@ -217,3 +238,5 @@ void CanvasImplementation::InitCanvasInfo(const int width, const int height) noe
 	canvas_info_.bmiHeader.biSizeImage = ((width * 24 + 31) & ~31) / 8 * height;
 
 }
+
+

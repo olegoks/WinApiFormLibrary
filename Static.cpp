@@ -2,7 +2,8 @@
 
 #include <StaticImplementation.hpp>
 
-Static::Static(){
+Static::Static():
+	impl_{ } {
 
 	try {
 
@@ -20,6 +21,23 @@ Static::~Static() noexcept{
 
 	if (std::any_cast<StaticImplementation*>(impl_) != nullptr)
 		delete std::any_cast<StaticImplementation*>(impl_);
+
+}
+
+Static::Static(Static&& move_static) noexcept:
+	impl_{ } {
+
+	std::swap(impl_, move_static.impl_);
+
+}
+
+Static& Static::operator=(Static&& move_static) noexcept{
+
+	if (&move_static == this) return *this;
+
+	std::swap(impl_, move_static.impl_);
+
+	return *this;
 
 }
 

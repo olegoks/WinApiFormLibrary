@@ -31,6 +31,12 @@
     <Filter Include="Static">
       <UniqueIdentifier>{c6f2f262-3169-42f6-b043-243c4547aac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message">
+      <UniqueIdentifier>{4a7181a7-7751-466d-beb3-d7ca249f813d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Canvas\Pixel">
+      <UniqueIdentifier>{03bbe707-f19f-4bd6-a40f-f512afbed21f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\FormTypes.hpp">
@@ -48,9 +54,6 @@
     </ClInclude>
     <ClInclude Include="AbstractComponent.hpp">
       <Filter>AbstractComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\CanvasImplementation.hpp">
-      <Filter>Canvas</Filter>
     </ClInclude>
     <ClInclude Include="Library\Button.hpp">
       <Filter>LibraryInterface</Filter>
@@ -75,6 +78,18 @@
     </ClInclude>
     <ClInclude Include="Library\Static.hpp">
       <Filter>LibraryInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasImplementation.hpp">
+      <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Pixel.hpp">
+      <Filter>Canvas\Pixel</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Message.hpp">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ComponentException.hpp">
+      <Filter>AbstractComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +125,15 @@
     </ClCompile>
     <ClCompile Include="Static.cpp">
       <Filter>Static</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentException.cpp">
+      <Filter>AbstractComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="Pixel.cpp">
+      <Filter>Canvas\Pixel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

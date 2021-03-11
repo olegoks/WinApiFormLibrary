@@ -21,17 +21,20 @@
   <ItemGroup>
     <ClInclude Include="AbstractComponent.hpp" />
     <ClInclude Include="ButtonImplementation.hpp" />
+    <ClInclude Include="CanvasImplementation.hpp" />
     <ClInclude Include="EditImplementation.hpp" />
     <ClInclude Include="FormImplementation.hpp" />
     <ClInclude Include="Functions.hpp" />
     <ClInclude Include="Library\Button.hpp" />
     <ClInclude Include="Library\Canvas.hpp" />
-    <ClInclude Include="Library\CanvasImplementation.hpp" />
+    <ClInclude Include="Library\ComponentException.hpp" />
     <ClInclude Include="Library\Edit.hpp" />
     <ClInclude Include="Library\FileDialog.hpp" />
     <ClInclude Include="Library\Form.hpp" />
     <ClInclude Include="Library\FormsLibrary.hpp" />
     <ClInclude Include="Library\FormTypes.hpp" />
+    <ClInclude Include="Library\Message.hpp" />
+    <ClInclude Include="Library\Pixel.hpp" />
     <ClInclude Include="Library\Static.hpp" />
     <ClInclude Include="StaticImplementation.hpp" />
   </ItemGroup>
@@ -40,12 +43,15 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="CanvasImplementation.cpp" />
+    <ClCompile Include="ComponentException.cpp" />
     <ClCompile Include="Edit.cpp" />
     <ClCompile Include="FileDialog.cpp" />
     <ClCompile Include="FormImplementation.cpp" />
     <ClCompile Include="Form.cpp" />
     <ClCompile Include="FormTypes.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="Static.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -57,26 +63,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -104,29 +110,29 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>Library\</OutDir>
     <TargetName>Form</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>Library\</OutDir>
     <TargetName>Form</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>Library\</OutDir>
     <TargetName>Form</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>Library\</OutDir>
     <TargetName>Form</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -140,7 +146,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -158,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -172,7 +178,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>

@@ -1,7 +1,7 @@
 #include "Button.hpp"
 #include "ButtonImplementation.hpp"
 
-Button::Button() : impl_{ nullptr } {
+Button::Button() : impl_{ } {
 
 	try {
 
@@ -17,8 +17,25 @@ Button::Button() : impl_{ nullptr } {
 
 Button::~Button()noexcept {
 
-	if (std::any_cast<ButtonImplementation*>(impl_) != nullptr)
+	if (impl_.has_value())
 		delete std::any_cast<ButtonImplementation*>(impl_);
+
+}
+
+Button::Button(Button&& move_button) noexcept:
+	impl_{ } {
+
+	std::swap(impl_, move_button.impl_);
+
+}
+
+Button& Button::operator=(Button&& move_button) noexcept{
+
+	if (&move_button == this)return *this;
+
+	std::swap(impl_, move_button.impl_);
+
+	return *this;
 
 }
 

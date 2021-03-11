@@ -69,7 +69,7 @@ void AbstractComponent::DestroyComponent(){
 
 }
 
-AbstractComponent::AbstractComponent() {
+AbstractComponent::AbstractComponent(){
 
 	hInstance_ = GetModuleHandle(NULL);
 
@@ -208,6 +208,13 @@ void AbstractComponent::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle) {
 
 	ex_dwStyle_ = ex_dwStyle;
 	dwStyle_ = dwStyle;
+	
+	if (WasCreated()) {
+
+		SetWindowLongPtr(GetHandle(), GWL_STYLE, dwStyle_ );
+		SetWindowLongPtr(GetHandle(), GWL_EXSTYLE, ex_dwStyle_);
+	
+	}
 
 }
 

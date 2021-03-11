@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <string>
 #include <FormTypes.hpp>
+#include <ComponentException.hpp>
+#include <Message.hpp>
 
 class AbstractComponent {
 private:
