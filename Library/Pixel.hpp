@@ -32,8 +32,9 @@ public:
 
 	explicit Pixel()noexcept;
 
-	explicit Pixel(Pixel&& move_pixel) = delete;
 	explicit Pixel(const Pixel& copy_pixel) = default;
+	explicit Pixel(Pixel&& move_pixel) = delete;
+	
 
 	Pixel& operator=(Pixel&& move_pixel) = delete;
 	Pixel& operator=(const Pixel& copy_pixel) = default;

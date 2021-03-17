@@ -56,7 +56,7 @@ Key ConvertWParamToKey(WPARAM wParam)noexcept(true) {
 Action ConvertMessageToAction(UINT message)noexcept(true) {
 
 	switch (message) {
-
+	case WM_PAINT: return Action::Repaint;
 	case WM_MOUSEMOVE: return Action::MouseMove;
 	case WM_KEYUP: return Action::KeyUp;
 	case WM_KEYDOWN: return Action::KeyDown;
@@ -65,7 +65,9 @@ Action ConvertMessageToAction(UINT message)noexcept(true) {
 	case WM_RBUTTONDOWN: return Action::RMouseDown;
 	case WM_RBUTTONUP: return Action::RMouseUp;
 	case WM_COMMAND: return Action::MenuControlAccel;
-	case WM_GETMINMAXINFO: return Action::Resize;
+	case WM_SIZE: return Action::Resized;
+	case WM_WINDOWPOSCHANGED: return Action::PositionChanged;
+	case WM_WINDOWPOSCHANGING: return Action::PositionChanging;
 	default:return Action::Nothing;
 
 	}

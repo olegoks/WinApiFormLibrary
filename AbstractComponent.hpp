@@ -17,8 +17,28 @@ private:
 	int x_		= kDefaultX;
 	int y_		= kDefaultY;
 
-	ProcessMessage process_messages_ = [](Message& message)noexcept->bool { 
+	ProcessMessage process_messages_ = [this](Message& message)noexcept->bool { 
 		
+		switch (message.GetAction()) {
+		case Action::PositionChanged: {
+
+			auto rect = (LPWINDOWPOS)message.GetLParam();
+			x_ = rect->x;
+			y_ = rect->y;
+
+			break;
+		}
+
+		case Action::Resized: {
+
+			width_ = LOWORD(message.GetLParam());
+			height_ = HIWORD(message.GetLParam());
+
+			break;
+		}
+
+		};
+
 		return false;
 	
 	};
@@ -68,6 +88,8 @@ public:
 	DWORD GetExtendedStyle()const noexcept;
 	int GetHeight()const noexcept;
 	int GetWidth()const noexcept;
+	const std::uint64_t GetClientHeight()const noexcept;
+	const std::uint64_t GetClientWidth()const noexcept;
 	int GetX()const noexcept;
 	int GetY()const noexcept;
 

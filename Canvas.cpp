@@ -51,6 +51,16 @@ const uint64_t Canvas::GetHeight() const noexcept{
 
 }
 
+const uint64_t Canvas::GetX() const noexcept
+{
+    return std::any_cast<CanvasImplementation*>(impl_)->GetX();
+}
+
+const uint64_t Canvas::GetY() const noexcept
+{
+    return std::any_cast<CanvasImplementation*>(impl_)->GetY();
+}
+
 Color Canvas::GetDefaultBackgroundColor() const noexcept{
 
     return Color{ CanvasImplementation::kDefaultBackgroundColor };

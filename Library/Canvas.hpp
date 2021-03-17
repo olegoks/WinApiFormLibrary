@@ -30,6 +30,8 @@ public:
 
 	const uint64_t GetWidth()const noexcept;
 	const uint64_t GetHeight()const noexcept;
+	const uint64_t GetX()const noexcept;
+	const uint64_t GetY()const noexcept;
 	Color GetDefaultBackgroundColor()const noexcept;
 	void Line(int x, int y, int _x, int _y, const Color& color)noexcept;
 	void Create(const HWND parent_hWnd);

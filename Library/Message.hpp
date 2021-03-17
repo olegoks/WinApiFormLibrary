@@ -4,6 +4,7 @@
 
 #include <windows.h>
 #include <windowsx.h>
+#include <cstdint>
 
 #define VK_A 65
 #define VK_B 66
@@ -41,7 +42,11 @@ enum class Action : unsigned int {
 	RMouseUp,
 	MenuControlAccel,
 	ButtonClicked,
-	Resize
+	Resized,
+	PositionChanged,
+	PositionChanging,
+	Repaint,
+	
 
 };
 
@@ -102,7 +107,8 @@ public:
 	Key GetKey()const noexcept(true) { return key_action_.key_; };
 	HWND GethWnd()const noexcept(true) { return hWnd_; };
 	int GetControlId()const noexcept(true) { return control_id_; };
-
+	std::uint64_t GetLParam()const noexcept { return lParam_; };
+	std::uint64_t GetWParam()const noexcept { return wParam_; }
 	int GetX()const noexcept(true) { return x_; }
 	int GetY()const noexcept(true) { return y_; }
 

@@ -82,7 +82,31 @@ AbstractComponent::~AbstractComponent(){
 
 void AbstractComponent::SetProcessFunction(ProcessMessage messages_processing) noexcept {
 
-	process_messages_ = messages_processing;
+	process_messages_ = [this, messages_processing](Message& message)noexcept->bool {
+
+		switch (message.GetAction()) {
+		case Action::PositionChanged: {
+
+			auto rect = (LPWINDOWPOS)message.GetLParam();
+			x_ = rect->x;
+			y_ = rect->y;
+
+			break;
+		}
+
+		case Action::Resized: {
+
+			width_ = LOWORD(message.GetLParam());
+			height_ = HIWORD(message.GetLParam());
+
+			break;
+		}
+
+		};
+
+		return messages_processing(message);
+
+	};
 
 }
 
@@ -99,7 +123,6 @@ void AbstractComponent::ChangePosition(const int x, const int y) noexcept(false)
 
 	x_ = x;
 	y_ = y;
-
 }
 
 void AbstractComponent::ChangeSize(const int width, const int height) {
@@ -136,6 +159,22 @@ void AbstractComponent::ChangeText(const std::wstring& text) {
 int AbstractComponent::GetWidth() const noexcept{
 
 	return width_;
+}
+
+const std::uint64_t AbstractComponent::GetClientHeight() const noexcept{
+
+	RECT client_rect{ 0 };
+	GetClientRect(self_hWnd_, &client_rect);
+
+	return client_rect.bottom;
+}
+
+const std::uint64_t AbstractComponent::GetClientWidth() const noexcept{
+
+	RECT client_rect{ 0 };
+	GetClientRect(self_hWnd_, &client_rect);
+
+	return client_rect.right;
 }
 
 int AbstractComponent::GetHeight() const noexcept {
