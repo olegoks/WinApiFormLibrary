@@ -67,9 +67,15 @@ Color Canvas::GetDefaultBackgroundColor() const noexcept{
     
 }
 
-void Canvas::Line(int x, int y, int _x, int _y, const Color& color) noexcept{
+void Canvas::Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, const Color& color) noexcept{
 
     std::any_cast<CanvasImplementation*>(impl_)->Line(x, y, _x, _y, color);
+
+}
+
+void Canvas::Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, uint64_t line_thickness, const Color& color) noexcept{
+
+    std::any_cast<CanvasImplementation*>(impl_)->Line(x, y, _x, _y, line_thickness, color);
 
 }
 
@@ -85,19 +91,26 @@ void Canvas::SetCanvasProc(ProcessMessage process_canvas) noexcept{
 
 }
 
-void Canvas::SetPixel(int x, int y, const Pixel& pixel) noexcept{
+void Canvas::SetPixel(const uint64_t x, const uint64_t y, const Pixel& pixel) noexcept{
 
     std::any_cast<CanvasImplementation*>(impl_)->SetPixel(x, y, pixel);
 
 }
 
-void Canvas::ChangeSize(const int width, const int height){
+
+void Canvas::SetPixel(const uint64_t x, const uint64_t y, uint64_t size, const Pixel& pixel) noexcept {
+
+    std::any_cast<CanvasImplementation*>(impl_)->SetPixel(x, y, size, pixel);
+
+}
+
+void Canvas::ChangeSize(const uint64_t width, const uint64_t height){
 
     std::any_cast<CanvasImplementation*>(impl_)->ChangeSize(width, height);
 
 }
 
-void Canvas::ChangePosition(const int x, const int y){
+void Canvas::ChangePosition(const uint64_t x, const uint64_t y){
 
     std::any_cast<CanvasImplementation*>(impl_)->ChangePosition(x, y);
 

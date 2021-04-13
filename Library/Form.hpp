@@ -36,14 +36,14 @@ public:
 	void ChangeCaption(const std::wstring& caption);
 	const HWND GetHandle()const noexcept;
 	void SetProcessFunction(ProcessMessage messages_processing)noexcept;
-	void ChangeSize(const int width, const int height);
+	void ChangeSize(const uint64_t width, const uint64_t height);
 	int GetWidth()const noexcept;
 	int GetHeight()const noexcept;
 	int GetX()const noexcept;
 	int GetY()const noexcept;
 
 	void ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle);
-	void ChangePosition(int x, int y);
+	void ChangePosition(uint64_t x, uint64_t y);
 
 };
 

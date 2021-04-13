@@ -16,7 +16,7 @@ Form::Form():
 
 }
 
-Form::~Form()noexcept(true){
+Form::~Form()noexcept{
 
 	if (impl_.has_value())
 		delete std::any_cast<FormImplementation*>(impl_);
@@ -50,13 +50,13 @@ void Form::Show(int nCmdShow){
 
 }
 
-void Form::Run() noexcept(false){
+void Form::Run(){
 
 	std::any_cast<FormImplementation*>(impl_)->Run();
 
 }
 
-void Form::Destroy() noexcept(false){
+void Form::Destroy(){
 
 	std::any_cast<FormImplementation*>(impl_)->Destroy();
 
@@ -81,7 +81,7 @@ void Form::SetProcessFunction(ProcessMessage messages_processing) noexcept{
 
 }
 
-void Form::ChangeSize(const int width, const int height){
+void Form::ChangeSize(const uint64_t width, const uint64_t height){
 
 	std::any_cast<FormImplementation*>(impl_)->ChangeSize(width, height);
 
@@ -113,7 +113,7 @@ void Form::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
 
 }
 
-void Form::ChangePosition(int x, int y) {
+void Form::ChangePosition(uint64_t x, uint64_t y) {
 
 	std::any_cast<FormImplementation*>(impl_)->ChangePosition(x, y);
 

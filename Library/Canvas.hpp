@@ -33,12 +33,14 @@ public:
 	const uint64_t GetX()const noexcept;
 	const uint64_t GetY()const noexcept;
 	Color GetDefaultBackgroundColor()const noexcept;
-	void Line(int x, int y, int _x, int _y, const Color& color)noexcept;
+	void Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, const Color& color)noexcept;
+	void Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, uint64_t line_thickness, const Color& color)noexcept;
 	void Create(const HWND parent_hWnd);
 	void SetCanvasProc(ProcessMessage process_canvas)noexcept;
-	void SetPixel(int x, int y, const Pixel& pixel)noexcept;
-	void ChangeSize(const int width, const int height);
-	void ChangePosition(const int x, const int y);
+	void SetPixel(const uint64_t x, const uint64_t y, uint64_t size, const Pixel& pixel)noexcept;
+	void SetPixel(const uint64_t x, const uint64_t y, const Pixel& pixel)noexcept;
+	void ChangeSize(const uint64_t width, const uint64_t height);
+	void ChangePosition(const uint64_t x, const uint64_t y);
 	void Fill(const Color& color)noexcept(true);
 	void Show(int nCmdShow);
 	void Destroy();

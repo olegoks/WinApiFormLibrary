@@ -13,3 +13,19 @@ Pixel::Pixel()noexcept:
 	Pixel{ 0, 0, 0 } {
 
 }
+
+Pixel::Pixel(Pixel&& move_pixel)noexcept:
+	rgba_{ 0 } {
+
+	std::swap(rgba_, move_pixel.rgba_);
+
+}
+
+Pixel& Pixel::operator=(Pixel&& move_pixel)noexcept{
+
+	if (this == &move_pixel)return *this;
+
+	std::swap(rgba_, move_pixel.rgba_);
+	
+	return *this;
+}

@@ -57,13 +57,13 @@ void Edit::ChangeText(const std::wstring& text){
 
 }
 
-void Edit::ChangeSize(const int width, const int height){
+void Edit::ChangeSize(const uint64_t width, const uint64_t height){
 
 	std::any_cast<EditImplementation*>(impl_)->ChangeSize(width, height);
 
 }
 
-void Edit::ChangePosition(const int x, const int y){
+void Edit::ChangePosition(const uint64_t x, const uint64_t y){
 
 	std::any_cast<EditImplementation*>(impl_)->ChangePosition(x, y);
 

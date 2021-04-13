@@ -110,7 +110,7 @@ void AbstractComponent::SetProcessFunction(ProcessMessage messages_processing) n
 
 }
 
-void AbstractComponent::ChangePosition(const int x, const int y) noexcept(false) {
+void AbstractComponent::ChangePosition(const uint64_t x, const uint64_t y) noexcept(false) {
 
 	if (WasCreated()) {
 
@@ -125,7 +125,7 @@ void AbstractComponent::ChangePosition(const int x, const int y) noexcept(false)
 	y_ = y;
 }
 
-void AbstractComponent::ChangeSize(const int width, const int height) {
+void AbstractComponent::ChangeSize(const uint64_t width, const uint64_t height) {
 
 	if (WasCreated()) {
 

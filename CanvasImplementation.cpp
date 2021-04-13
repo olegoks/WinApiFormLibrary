@@ -28,7 +28,7 @@ CanvasImplementation::CanvasImplementation():
 
 }
 
-void CanvasImplementation::ChangePosition(const int x, const int y)noexcept(false) {
+void CanvasImplementation::ChangePosition(const uint64_t x, const uint64_t y) {
 
 	try {
 
@@ -80,10 +80,10 @@ void CanvasImplementation::SolidRectangle(const uint64_t x, const uint64_t y, co
 
 }
 
-void CanvasImplementation::Line(int x, int y, int _x, int _y, const Color& color)noexcept {
+void CanvasImplementation::Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, const Color& color)noexcept {
 
-	const int deltaX = abs(_x - x);
-	const int deltaY = abs(_y - y);
+	const int deltaX = abs((int)_x - (int)x);
+	const int deltaY = abs((int)_y - (int)y);
 	const int signX = x < _x ? 1 : -1;
 	const int signY = y < _y ? 1 : -1;
 
@@ -115,12 +115,59 @@ void CanvasImplementation::Line(int x, int y, int _x, int _y, const Color& color
 
 }
 
-void CanvasImplementation::SetPixel(int x, int y, const Pixel& pixel)noexcept {
+void CanvasImplementation::Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, uint64_t line_thickness, const Color& color) noexcept{
 
-	int index = y * buffer_width_+ x;
+	const int deltaX = abs((int)_x - (int)x);
+	const int deltaY = abs((int)_y - (int)y);
+	const int signX = x < _x ? 1 : -1;
+	const int signY = y < _y ? 1 : -1;
 
-	if (0 < x && x < buffer_width_ && 0 < y && y < buffer_height_)
+	int error = deltaX - deltaY;
+
+	SetPixel(x, y, line_thickness, color);
+
+	while (x != _x || y != _y) {
+
+		const int error2 = error * 2;
+
+		SetPixel(x, y, line_thickness, color);
+
+		if (error2 > -deltaY) {
+
+			error -= deltaY;
+			x += signX;
+
+		}
+
+		if (error2 < deltaX) {
+
+			error += deltaX;
+			y += signY;
+
+		}
+
+	}
+
+}
+
+void CanvasImplementation::SetPixel(const uint64_t x, const uint64_t y, const Pixel& pixel)noexcept {
+
+	if (0 < x && x < buffer_width_ && 0 < y && y < buffer_height_) {
+
+		int index = y * buffer_width_ + x;
 		buffer_[index] = pixel;
+
+	}
+
+}
+
+void CanvasImplementation::SetPixel(const uint64_t x, const uint64_t y, uint64_t size, const Pixel& pixel)noexcept {
+
+	if (!(size % 2))++size;
+
+	for (auto first_x = x - size; first_x < x + size; ++first_x)
+		for (auto first_y = y - size; first_y < y + size; ++first_y)
+			SetPixel(first_x, first_y, pixel);
 
 }
 
@@ -194,7 +241,7 @@ void CanvasImplementation::Destroy(){
 
 }
 
-void CanvasImplementation::ChangeSize(const int width, const int height) {
+void CanvasImplementation::ChangeSize(const uint64_t width, const uint64_t height) {
 
 	AbstractComponent::ChangeSize(width, height);
 
@@ -202,11 +249,13 @@ void CanvasImplementation::ChangeSize(const int width, const int height) {
 
 void CanvasImplementation::ChangeBufferSize(const uint64_t new_width, const uint64_t new_height) {
 
+	static const uint64_t max_pixels_number = GetSystemMetrics(SM_CYSCREEN) * GetSystemMetrics(SM_CXSCREEN);
+
 	Pixel* new_buffer = nullptr;
+	const uint64_t new_pixels_number = new_width * new_height;
 
 	try {
 
-		const uint64_t new_pixels_number = (uint64_t)new_width * (uint64_t)new_height;
 		new_buffer = new Pixel[new_pixels_number];
 		std::fill(new_buffer, new_buffer + new_pixels_number, kDefaultBackgroundColor);
 
@@ -261,6 +310,7 @@ void CanvasImplementation::SetCanvasProc(ProcessMessage process_canvas)noexcept(
 			ChangeCanvasInfo(new_buffer_width, new_buffer_height);
 
 		}
+
 		if (message.GetAction() == Action::Repaint) {
 
 			//Исключаю клиентскую область из региона обновления экрана.
@@ -275,7 +325,9 @@ void CanvasImplementation::SetCanvasProc(ProcessMessage process_canvas)noexcept(
 
 }
 
-void CanvasImplementation::ShowFrame(const void* const frame_buffer)noexcept(false) {
+void CanvasImplementation::ShowFrame(const void* const frame_buffer){
+
+	if (!pixels_number_)return;
 
 	if (!SetDIBitsToDevice(
 		device_context_,
@@ -294,7 +346,7 @@ void CanvasImplementation::ShowFrame(const void* const frame_buffer)noexcept(fal
 
 }
 
-void CanvasImplementation::ChangeCanvasInfo(const int width, const int height) noexcept{
+void CanvasImplementation::ChangeCanvasInfo(const uint64_t width, const uint64_t height) noexcept{
 
 	canvas_info_ = CANVASINFO{ 0 };
 	canvas_info_.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);

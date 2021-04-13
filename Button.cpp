@@ -44,7 +44,7 @@ void Button::SetProcessFunction(ProcessMessage messages_processing) noexcept{
 	return std::any_cast<ButtonImplementation*>(impl_)->SetProcessFunction(messages_processing);
 }
 
-void Button::ChangeSize(const int width, const int height)
+void Button::ChangeSize(const uint64_t width, const uint64_t height)
 {
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangeSize(width, height);
 }
@@ -54,7 +54,7 @@ void Button::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle){
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangeStyle(ex_dwStyle, dwStyle);
 }
 
-void Button::ChangePosition(const int x, const int y){
+void Button::ChangePosition(const uint64_t x, const uint64_t y){
 
 	return std::any_cast<ButtonImplementation*>(impl_)->ChangePosition(x, y);
 }

@@ -46,6 +46,7 @@ enum class Action : unsigned int {
 	PositionChanged,
 	PositionChanging,
 	Repaint,
+	Close
 	
 
 };

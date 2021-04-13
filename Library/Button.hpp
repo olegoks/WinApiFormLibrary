@@ -5,7 +5,8 @@
 
 #include <any>
 #include <FormTypes.hpp>
-
+#include <cstdint>
+using std::uint64_t;
 class EXPIMP::std::any;
 
 class EXPIMP Button {
@@ -27,9 +28,9 @@ public:
 	Button& operator=(Button&& move_button)noexcept;
 
 	void SetProcessFunction(ProcessMessage messages_processing)noexcept;
-	void ChangeSize(const int width, const int height);
+	void ChangeSize(const uint64_t width, const uint64_t height);
 	void ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle);
-	void ChangePosition(const int x, const int y);
+	void ChangePosition(const uint64_t x, const uint64_t y);
 	bool WasCreated()const noexcept;
 	
 	HWND GetHandle()const noexcept;

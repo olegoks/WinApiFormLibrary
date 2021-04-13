@@ -19,7 +19,7 @@ private:
 
 private:
 
-	void ChangeCanvasInfo(const int width, const int height)noexcept;
+	void ChangeCanvasInfo(const uint64_t width, const uint64_t height)noexcept;
 	void ShowFrame(const void* const frame);
 	void ChangeBufferSize(const uint64_t new_width, const uint64_t new_height);
 
@@ -31,12 +31,14 @@ public:
 	const uint64_t GetX()const noexcept;
 	const uint64_t GetY()const noexcept;
 	void SolidRectangle(const uint64_t x, const uint64_t y, const uint64_t width, const uint64_t height, const Color& fill_color);
-	void Line(int x, int y, int _x, int _y, const Color& color)noexcept;
+	void Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, const Color& color)noexcept;
+	void Line(uint64_t x, uint64_t y, uint64_t _x, uint64_t _y, uint64_t line_thickness, const Color& color)noexcept;
 	void Create(const HWND parent_hWnd)noexcept(false)override;
 	void SetCanvasProc(ProcessMessage process_canvas)noexcept;
-	void SetPixel(int x, int y, const Pixel& pixel)noexcept;
-	void ChangeSize(const int width, const int height);
-	void ChangePosition(const int x, const int y);
+	void SetPixel(const uint64_t x, const uint64_t y, const Pixel& pixel)noexcept;
+	void SetPixel(const uint64_t x, const uint64_t y, const uint64_t size, const Pixel& pixel)noexcept;
+	void ChangeSize(const uint64_t width, const uint64_t height);
+	void ChangePosition(const uint64_t x, const uint64_t y);
 	void Fill(const Color& color)noexcept(true);
 	void Show(int nCmdShow)override;
 	void Destroy()override;

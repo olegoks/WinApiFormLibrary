@@ -29,8 +29,8 @@ public:
 	void Create(const HWND parent_hWnd);
 	void Show(int nCmdShow = SW_SHOW);
 	void ChangeText(const std::wstring& text);
-	void ChangePosition(const int x, const int y);
-	void ChangeSize(const int width, const int height);
+	void ChangePosition(const uint64_t x, const uint64_t y);
+	void ChangeSize(const uint64_t width, const uint64_t height);
 	int GetX()const noexcept;
 	int GetY()const noexcept;
 	int GetWidth()const noexcept;

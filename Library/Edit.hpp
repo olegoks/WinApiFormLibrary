@@ -27,8 +27,8 @@ public:
 	void SetProcessFunction(ProcessMessage process_message)noexcept;
 	std::string GetText()const;
 	void ChangeText(const std::wstring& text);
-	void ChangeSize(const int width, const int height);
-	void ChangePosition(const int x, const int y);
+	void ChangeSize(const uint64_t width, const uint64_t height);
+	void ChangePosition(const uint64_t x, const uint64_t y);
 	int GetHeight()const noexcept;
 	int GetWidth()const noexcept;
 	int GetX()const noexcept;

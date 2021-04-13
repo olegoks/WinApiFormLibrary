@@ -68,6 +68,7 @@ Action ConvertMessageToAction(UINT message)noexcept(true) {
 	case WM_SIZE: return Action::Resized;
 	case WM_WINDOWPOSCHANGED: return Action::PositionChanged;
 	case WM_WINDOWPOSCHANGING: return Action::PositionChanging;
+	case WM_CLOSE:return Action::Close;
 	default:return Action::Nothing;
 
 	}

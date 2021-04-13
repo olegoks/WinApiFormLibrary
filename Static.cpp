@@ -59,13 +59,13 @@ void Static::ChangeText(const std::wstring& text){
 
 }
 
-void Static::ChangePosition(const int x, const int y){
+void Static::ChangePosition(const uint64_t x, const uint64_t y){
 
 	std::any_cast<StaticImplementation*>(impl_)->ChangePosition(x, y);
 
 }
 
-void Static::ChangeSize(const int width, const int height){
+void Static::ChangeSize(const uint64_t width, const uint64_t height){
 
 	std::any_cast<StaticImplementation*>(impl_)->ChangeSize(width, height);
 

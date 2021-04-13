@@ -70,18 +70,18 @@ public:
 public:
 
 	static inline const std::wstring kDefaultText = L"Default text.";
-	static inline const int			 kDefaultWidth = 600;
-	static inline const int			 kDefaultHeight = 300;
-	static inline const int			 kDefaultX = 0;
-	static inline const int			 kDefaultY = 0;
+	static inline const uint64_t	 kDefaultWidth = 600;
+	static inline const uint64_t	 kDefaultHeight = 300;
+	static inline const uint64_t	 kDefaultX = 0;
+	static inline const uint64_t	 kDefaultY = 0;
 	static inline const DWORD		 kDefaultStyle = NULL;
 	static inline const DWORD		 kDefaultExStyle = NULL;
 	static inline const std::wstring kDefaultClassName = L"Component";
 
 	void SetProcessFunction(ProcessMessage messages_processing)noexcept;
-	void ChangeSize(const int width, const int height);
+	void ChangeSize(const uint64_t width, const uint64_t height);
 	void ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle);
-	void ChangePosition(const int x, const int y);
+	void ChangePosition(const uint64_t x, const uint64_t y);
 	void ChangeText(const std::wstring& text);
 	bool WasCreated()const noexcept;
 	DWORD GetStyle()const noexcept;
