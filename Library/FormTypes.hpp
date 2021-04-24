@@ -17,6 +17,7 @@
 #define EXPIMP __declspec(dllimport)
 #endif
 
+#include <Pixel.hpp>
 #include <ComponentException.hpp>
 #include <Message.hpp>
 

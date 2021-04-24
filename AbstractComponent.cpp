@@ -1,5 +1,7 @@
 #include "AbstractComponent.hpp"
 
+#define __STD ::std::
+
 bool AbstractComponent::CallProcessMessage(Message& message) {
 
 	return process_messages_(message);
@@ -9,17 +11,17 @@ void AbstractComponent::RegisterComponentClass(const std::wstring& class_name){
 
 	WNDCLASSEX wc;
 	wc.cbSize = sizeof(wc);
-	wc.style = NULL;//CS_HREDRAW | CS_VREDRAW;
+	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = ComponentProc;
 	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 4;
+	wc.cbWndExtra = sizeof(__STD uint64_t);
 	wc.hInstance = hInstance_;
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hIcon = NULL;//LoadIcon(NULL, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wc.hbrBackground = /*(HBRUSH)RGB(kDefaultBackgroundColor.rgba_.r, kDefaultBackgroundColor.rgba_.g, kDefaultBackgroundColor.rgba_.b);*/(HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = class_name.c_str();
-	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hIconSm = NULL;//LoadIcon(NULL, IDI_APPLICATION);
 
 	if (!RegisterClassEx(&wc))
 		throw ComponentException{ u8"RegisterClass error." };
@@ -39,14 +41,31 @@ bool AbstractComponent::WasCreated() const noexcept{
 	return self_hWnd_ != NULL;
 }
 
-DWORD AbstractComponent::GetStyle() const noexcept{
+DWORD AbstractComponent::GetStyle() const{
 
-	return dwStyle_;
+	BOOL result = GetWindowLongPtr(GetHandle(), GWL_STYLE);
+
+	if (!result) {
+
+		throw ComponentException{ u8"GetWindowLong error." };
+
+	}
+
+	return result;
+
 }
 
-DWORD AbstractComponent::GetExtendedStyle() const noexcept{
+DWORD AbstractComponent::GetExtendedStyle() const {
 
-	return ex_dwStyle_;
+	BOOL result = GetWindowLongPtr(GetHandle(), GWL_EXSTYLE);
+
+	if (!result) {
+
+		throw ComponentException{ u8"GetWindowLong error." };
+
+	}
+
+	return result;
 }
 
 const HWND AbstractComponent::GetHandle() const noexcept {
@@ -56,16 +75,7 @@ const HWND AbstractComponent::GetHandle() const noexcept {
 
 void AbstractComponent::DestroyComponent(){
 
-	try {
-
-		SendMessage(self_hWnd_, WM_CLOSE, NULL, NULL);
-
-	}
-	catch (const ComponentException&) {
-
-		throw ComponentException{ u8"Destroying error." };
-
-	}
+	SendMessage(self_hWnd_, WM_CLOSE, NULL, NULL);
 
 }
 
@@ -84,26 +94,6 @@ void AbstractComponent::SetProcessFunction(ProcessMessage messages_processing) n
 
 	process_messages_ = [this, messages_processing](Message& message)noexcept->bool {
 
-		switch (message.GetAction()) {
-		case Action::PositionChanged: {
-
-			auto rect = (LPWINDOWPOS)message.GetLParam();
-			x_ = rect->x;
-			y_ = rect->y;
-
-			break;
-		}
-
-		case Action::Resized: {
-
-			width_ = LOWORD(message.GetLParam());
-			height_ = HIWORD(message.GetLParam());
-
-			break;
-		}
-
-		};
-
 		return messages_processing(message);
 
 	};
@@ -114,30 +104,25 @@ void AbstractComponent::ChangePosition(const uint64_t x, const uint64_t y) noexc
 
 	if (WasCreated()) {
 
-		BOOL success = SetWindowPos(self_hWnd_, NULL, x, y, width_, height_, NULL);
+		BOOL success = SetWindowPos(self_hWnd_, NULL, x, y, GetWidth(), GetHeight(), NULL);
 
 		if (!success)
 			throw ComponentException{ u8"SetWindowPos error." };
 
 	}
 
-	x_ = x;
-	y_ = y;
 }
 
 void AbstractComponent::ChangeSize(const uint64_t width, const uint64_t height) {
 
 	if (WasCreated()) {
 
-		BOOL success = SetWindowPos(self_hWnd_, NULL, x_, y_, width, height, SWP_NOZORDER);
+		BOOL success = SetWindowPos(self_hWnd_, NULL, GetX(), GetY(), width, height, SWP_NOZORDER);
 
 		if (!success)
 			throw ComponentException{ u8"SetWindowPos error." };
 
 	}
-
-	width_ = width;
-	height_ = height;
 
 }
 
@@ -152,44 +137,77 @@ void AbstractComponent::ChangeText(const std::wstring& text) {
 
 	}
 
-	text_ = text;
-
 }
 
-int AbstractComponent::GetWidth() const noexcept{
+int AbstractComponent::GetWidth() const {
 
-	return width_;
+	RECT rectangle{ 0 };
+
+	BOOL result = GetWindowRect(self_hWnd_, &rectangle);
+
+	if (!result)
+		throw ComponentException{ u8"GetWindowRect error." };
+
+	return rectangle.right - rectangle.left;
 }
 
-const std::uint64_t AbstractComponent::GetClientHeight() const noexcept{
+const std::uint64_t AbstractComponent::GetClientHeight() const {
 
 	RECT client_rect{ 0 };
-	GetClientRect(self_hWnd_, &client_rect);
+	BOOL result = GetClientRect(self_hWnd_, &client_rect);
+
+	if (!result)
+		throw ComponentException{ u8"GetClientRect error." };
 
 	return client_rect.bottom;
 }
 
-const std::uint64_t AbstractComponent::GetClientWidth() const noexcept{
+const std::uint64_t AbstractComponent::GetClientWidth() const{
 
 	RECT client_rect{ 0 };
-	GetClientRect(self_hWnd_, &client_rect);
+	BOOL result = GetClientRect(self_hWnd_, &client_rect);
+
+	if (!result)
+		throw ComponentException{ u8"GetClientRect error." };
 
 	return client_rect.right;
 }
 
-int AbstractComponent::GetHeight() const noexcept {
+int AbstractComponent::GetHeight() const {
 
-	return height_;
+	RECT rectangle{ 0 };
+
+	BOOL result = GetWindowRect(self_hWnd_, &rectangle);
+
+	if (!result)
+		throw ComponentException{ u8"GetWindowRect error." };
+
+	return rectangle.bottom - rectangle.top;
 }
 
-int AbstractComponent::GetX() const noexcept {
+int AbstractComponent::GetX() const {
 
-	return x_;
+	RECT rectangle{ 0 };
+
+	BOOL result = GetWindowRect(self_hWnd_, &rectangle);
+
+	if (!result)
+		throw ComponentException{ u8"GetWindowRect error." };
+
+	return rectangle.left;
 }
 
-int AbstractComponent::GetY() const noexcept {
+int AbstractComponent::GetY() const {
 
-	return y_;
+
+	RECT rectangle{ 0 };
+
+	BOOL result = GetWindowRect(self_hWnd_, &rectangle);
+
+	if (!result)
+		throw ComponentException{ u8"GetWindowRect error." };
+
+	return rectangle.right;
 }
 
 #ifdef _M_X64
@@ -208,14 +226,14 @@ void AbstractComponent::CreateComponent(const HWND parent_hWnd, const std::wstri
 	if (class_name != kDefaultClassName)
 		class_name_ = class_name;
 
-	self_hWnd_ = CreateWindowEx(ex_dwStyle_,
+	self_hWnd_ = CreateWindowEx(kDefaultExStyle,
 		class_name_.c_str(),
 		text_.c_str(),
-		dwStyle_,
-		x_,
-		y_,
-		width_,
-		height_,
+		kDefaultStyle,
+		kDefaultX,
+		kDefaultY,
+		kDefaultWidth,
+		kDefaultHeight,
 		parent_hWnd,
 		HMENU(NULL),
 		(HINSTANCE)hInstance_,
@@ -245,13 +263,10 @@ void AbstractComponent::CreateComponent(const HWND parent_hWnd, const std::wstri
 
 void AbstractComponent::ChangeStyle(DWORD ex_dwStyle, DWORD dwStyle) {
 
-	ex_dwStyle_ = ex_dwStyle;
-	dwStyle_ = dwStyle;
-	
 	if (WasCreated()) {
 
-		SetWindowLongPtr(GetHandle(), GWL_STYLE, dwStyle_ );
-		SetWindowLongPtr(GetHandle(), GWL_EXSTYLE, ex_dwStyle_);
+		SetWindowLongPtr(GetHandle(), GWL_STYLE, dwStyle );
+		SetWindowLongPtr(GetHandle(), GWL_EXSTYLE, ex_dwStyle);
 	
 	}
 

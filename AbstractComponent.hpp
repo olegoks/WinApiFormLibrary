@@ -12,33 +12,8 @@
 class AbstractComponent {
 private:
 
-	int height_ = kDefaultHeight;
-	int width_  = kDefaultWidth;
-	int x_		= kDefaultX;
-	int y_		= kDefaultY;
-
 	ProcessMessage process_messages_ = [this](Message& message)noexcept->bool { 
 		
-		switch (message.GetAction()) {
-		case Action::PositionChanged: {
-
-			auto rect = (LPWINDOWPOS)message.GetLParam();
-			x_ = rect->x;
-			y_ = rect->y;
-
-			break;
-		}
-
-		case Action::Resized: {
-
-			width_ = LOWORD(message.GetLParam());
-			height_ = HIWORD(message.GetLParam());
-
-			break;
-		}
-
-		};
-
 		return false;
 	
 	};
@@ -47,9 +22,7 @@ private:
 	HINSTANCE	 hInstance_	  = NULL;
 	std::wstring text_		  = kDefaultText;
 	HWND		 parent_hWnd_ = NULL;
-	DWORD		 ex_dwStyle_  = NULL;
 	HWND		 self_hWnd_	  = NULL;
-	DWORD		 dwStyle_	  = NULL;
 
 	static LRESULT CALLBACK ComponentProc(HWND hWnd, UINT message, WPARAM  wParam, LPARAM lParam);
 
@@ -77,6 +50,7 @@ public:
 	static inline const DWORD		 kDefaultStyle = NULL;
 	static inline const DWORD		 kDefaultExStyle = NULL;
 	static inline const std::wstring kDefaultClassName = L"Component";
+	static inline const Color		 kDefaultBackgroundColor{ 255, 255, 255 };
 
 	void SetProcessFunction(ProcessMessage messages_processing)noexcept;
 	void ChangeSize(const uint64_t width, const uint64_t height);
@@ -84,14 +58,14 @@ public:
 	void ChangePosition(const uint64_t x, const uint64_t y);
 	void ChangeText(const std::wstring& text);
 	bool WasCreated()const noexcept;
-	DWORD GetStyle()const noexcept;
-	DWORD GetExtendedStyle()const noexcept;
-	int GetHeight()const noexcept;
-	int GetWidth()const noexcept;
-	const std::uint64_t GetClientHeight()const noexcept;
-	const std::uint64_t GetClientWidth()const noexcept;
-	int GetX()const noexcept;
-	int GetY()const noexcept;
+	DWORD GetStyle()const;
+	DWORD GetExtendedStyle()const;
+	int GetHeight()const;
+	int GetWidth()const;
+	const std::uint64_t GetClientHeight()const;
+	const std::uint64_t GetClientWidth()const;
+	int GetX()const;
+	int GetY()const;
 
 	virtual void Create(const HWND parent_hWnd = NULL) = 0;
 	virtual void Show(int nCmdShow = SW_SHOWNORMAL)= 0;

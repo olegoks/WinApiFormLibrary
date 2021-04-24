@@ -69,16 +69,20 @@ void FormImplementation::Destroy(){
 
 WPARAM FormImplementation::StartMessageLoop()const {
 
-	MSG msg{ 0 };
+	MSG message{ 0 };
 
-	while (GetMessage(&msg, NULL, NULL, NULL)) {
-		
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	BOOL no_error = 0;
+
+	while ((no_error = GetMessage(&message, NULL, NULL, NULL)) != 0) {
+
+		TranslateMessage(&message);
+
+		//Call WinProc function and get MSG msg message
+		DispatchMessage(&message);
 
 	}
 
-	return msg.wParam;
+	return message.wParam;
 
 }
 

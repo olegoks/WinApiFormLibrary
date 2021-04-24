@@ -25,6 +25,8 @@ private:
 
 public:
 
+	void ShowRGBAFrame(const Pixel* const frame);
+
 	static inline const Color kDefaultBackgroundColor = Color{ 255, 255, 255 };
 	const uint64_t GetWidth()const noexcept;
 	const uint64_t GetHeight()const noexcept;

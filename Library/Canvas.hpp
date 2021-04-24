@@ -27,7 +27,7 @@ public:
 	Canvas& operator=(const Canvas& copy_form)noexcept = delete;
 
 	~Canvas()noexcept;
-
+	void ShowRGBAFrame(const Pixel* const frame);
 	const uint64_t GetWidth()const noexcept;
 	const uint64_t GetHeight()const noexcept;
 	const uint64_t GetX()const noexcept;

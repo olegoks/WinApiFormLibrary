@@ -17,8 +17,7 @@ Canvas::Canvas() : impl_{ } {
 
         impl_ = new CanvasImplementation{};
 
-    }
-    catch (const std::bad_alloc&) {
+    } catch (const std::bad_alloc&) {
 
         throw ComponentException{ u8"Canvas allocation memory error." };
 
@@ -134,7 +133,11 @@ void Canvas::Destroy(){
 
 }
 
+void Canvas::ShowRGBAFrame(const Pixel* const frame) {
 
+    std::any_cast<CanvasImplementation*>(impl_)->ShowRGBAFrame(frame);
+
+}
 
 void Canvas::Flush(){
 

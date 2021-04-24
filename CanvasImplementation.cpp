@@ -52,6 +52,12 @@ void CanvasImplementation::Fill(const Color& color)noexcept{
 
 }
 
+void CanvasImplementation::ShowRGBAFrame(const Pixel* const frame){
+
+	ShowFrame(reinterpret_cast<const void* const>(frame));
+
+}
+
 const uint64_t CanvasImplementation::GetWidth() const noexcept{
 
 	return AbstractComponent::GetWidth();
@@ -189,7 +195,7 @@ void CanvasImplementation::Create(const HWND parent_hWnd) {
 
 	try {
 
-		AbstractComponent::ChangeStyle(NULL, WS_CHILD | WS_THICKFRAME);
+		AbstractComponent::ChangeStyle(NULL, WS_CHILD/* | WS_THICKFRAME*/);
 		AbstractComponent::RegisterComponentClass(L"Canvas");
 		AbstractComponent::CreateComponent(parent_hWnd);
 		
@@ -351,7 +357,7 @@ void CanvasImplementation::ChangeCanvasInfo(const uint64_t width, const uint64_t
 	canvas_info_ = CANVASINFO{ 0 };
 	canvas_info_.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	canvas_info_.bmiHeader.biWidth = width;
-	canvas_info_.bmiHeader.biHeight = -(static_cast<int>(height));
+	canvas_info_.bmiHeader.biHeight = /*-*/(static_cast<int>(height));
 	canvas_info_.bmiHeader.biPlanes = 1;
 	canvas_info_.bmiHeader.biBitCount = 32;
 	canvas_info_.bmiHeader.biCompression = BI_RGB;

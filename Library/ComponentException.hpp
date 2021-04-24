@@ -14,6 +14,7 @@ class EXPIMP ComponentException final : protected std::exception {
 private:
 
 	std::string message_;
+	DWORD code_;
 
 public:
 
@@ -27,7 +28,9 @@ public:
 
 	explicit ComponentException(std::string&& message)noexcept;
 	explicit ComponentException(const std::string& message)noexcept;
+	explicit ComponentException(const std::string & message, DWORD error_code)noexcept;
 	const std::string& What()const noexcept;
+	__forceinline DWORD Code()const noexcept;
 
 };
 
